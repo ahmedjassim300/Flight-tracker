@@ -17,11 +17,7 @@
 html,body{height:100%;overflow:hidden}
 body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);display:flex;flex-direction:column}
 
-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 18px;height:52px;background:var(--sf);border-bottom:1px solid var(--bd);
-  flex-shrink:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5);
-}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;background:var(--sf);border-bottom:1px solid var(--bd);flex-shrink:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
 .logo{display:flex;align-items:center;gap:9px}
 .logo svg{width:32px;height:32px}
 .logo-t{font-size:19px;font-weight:900;color:#fff;letter-spacing:-.5px}
@@ -56,9 +52,9 @@ header{
 .fb.on[data-t="drone"]{border-color:#aaa;background:rgba(204,204,204,.06);color:#bbb}
 .fd{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .sw{padding:8px 13px;border-bottom:1px solid var(--bd)}
-.si{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;color:var(--tx);font-family:'Tajawal',sans-serif;font-size:13px;outline:none;transition:border-color .2s;direction:rtl}
-.si:focus{border-color:var(--ac)}
-.si::placeholder{color:var(--dim)}
+.sinp{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;color:var(--tx);font-family:'Tajawal',sans-serif;font-size:13px;outline:none;transition:border-color .2s;direction:rtl}
+.sinp:focus{border-color:var(--ac)}
+.sinp::placeholder{color:var(--dim)}
 .lh{padding:8px 13px;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
 .lc{font-family:'Share Tech Mono',monospace;color:var(--ac);font-size:12px}
 .al{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bd) transparent}
@@ -85,13 +81,11 @@ header{
 .dlb{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
 .dv{font-family:'Share Tech Mono',monospace;font-size:12px;color:#fff}
 .dv.sm{font-size:11px}
-
 .leg{position:absolute;bottom:34px;left:12px;z-index:500;background:rgba(8,14,22,.93);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;backdrop-filter:blur(10px)}
 .lg-t{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);margin-bottom:7px}
 .lg-i{display:flex;align-items:center;gap:7px;font-size:12px;margin-bottom:4px}
 .lg-d{width:8px;height:8px;border-radius:50%}
-
-.leaflet-popup-content-wrapper{background:var(--sf2)!important;border:1px solid var(--bd)!important;border-radius:8px!important;color:var(--tx)!important;box-shadow:0 8px 32px rgba(0,0,0,.75)!important;font-family:'Tajawal',sans-serif!important;min-width:200px}
+.leaflet-popup-content-wrapper{background:var(--sf2)!important;border:1px solid var(--bd)!important;border-radius:8px!important;color:var(--tx)!important;box-shadow:0 8px 32px rgba(0,0,0,.75)!important;font-family:'Tajawal',sans-serif!important;min-width:210px}
 .leaflet-popup-tip{background:var(--sf2)!important}
 .leaflet-popup-close-button{color:var(--dim)!important;font-size:18px!important}
 .pc{font-family:'Share Tech Mono',monospace;font-size:15px;color:#fff;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -99,33 +93,22 @@ header{
 .pf .lb{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
 .pf .vl{font-family:'Share Tech Mono',monospace;font-size:12px;color:#fff}
 .pf .vl.sm{font-size:10px}
-
-.sb{height:25px;background:var(--sf);border-top:1px solid var(--bd);display:flex;align-items:center;padding:0 13px;gap:12px;font-size:11px;color:var(--dim);font-family:'Share Tech Mono',monospace;flex-shrink:0;z-index:1000}
+.statusbar{height:25px;background:var(--sf);border-top:1px solid var(--bd);display:flex;align-items:center;padding:0 13px;gap:12px;font-size:11px;color:var(--dim);font-family:'Share Tech Mono',monospace;flex-shrink:0;z-index:1000}
 .si2{display:flex;gap:4px;align-items:center}
 .sep{color:var(--bd)}
 #clk{color:var(--ac);margin-right:auto}
 .ok{color:var(--civ)}.er{color:var(--mil)}.wa{color:#ffa000}
-
-/* LOADING */
 #load{position:absolute;inset:0;background:rgba(6,11,20,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3000;backdrop-filter:blur(4px)}
 .sp{width:44px;height:44px;border-radius:50%;border:3px solid var(--bd);border-top-color:var(--ac);animation:spin .8s linear infinite;margin-bottom:12px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.lt{font-size:13px;color:var(--tx);letter-spacing:1px}
-.ls{font-size:11px;color:var(--dim);margin-top:5px;text-align:center;max-width:260px}
+.lt{font-size:13px;color:var(--tx)}
+.ls{font-size:11px;color:var(--dim);margin-top:5px;text-align:center;max-width:280px}
 #load.h{display:none}
-
-/* DEMO BANNER */
-#demoBanner{
-  display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);
-  background:rgba(255,160,0,.15);border:1px solid rgba(255,160,0,.4);
-  color:#ffa000;padding:6px 16px;border-radius:6px;font-size:11px;
-  z-index:2000;text-align:center;white-space:nowrap;
-}
-#demoBanner.s{display:block}
-
-/* SOURCE badge */
 #srcB{background:rgba(0,200,240,.08);border:1px solid rgba(0,200,240,.25);color:var(--ac);padding:1px 8px;border-radius:3px;font-size:10px}
 #srcB.demo{background:rgba(255,160,0,.1);border-color:rgba(255,160,0,.4);color:#ffa000}
+#modeBanner{display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);padding:5px 14px;border-radius:5px;font-size:11px;z-index:2000;white-space:nowrap}
+#modeBanner.real{display:block;background:rgba(0,223,106,.12);border:1px solid rgba(0,223,106,.35);color:var(--civ)}
+#modeBanner.demo{display:block;background:rgba(255,160,0,.12);border:1px solid rgba(255,160,0,.35);color:#ffa000}
 </style>
 </head>
 <body>
@@ -156,16 +139,16 @@ header{
   <div id="map">
     <div id="load">
       <div class="sp"></div>
-      <div class="lt" id="ldTxt">جارٍ الاتصال بمصادر البيانات...</div>
-      <div class="ls" id="ldSub">يحاول الاتصال بـ adsb.lol · adsb.fi · OpenSky</div>
+      <div class="lt" id="ldTxt">جارٍ الاتصال بشبكة ADS-B...</div>
+      <div class="ls" id="ldSub"></div>
     </div>
-    <div id="demoBanner">⚠️ وضع العرض التجريبي — بيانات افتراضية واقعية (تحقق من الإنترنت)</div>
+    <div id="modeBanner"></div>
     <div class="leg">
       <div class="lg-t">نوع الطائرة</div>
       <div class="lg-i"><div class="lg-d" style="background:var(--mil);box-shadow:0 0 5px var(--mil)"></div>عسكري</div>
       <div class="lg-i"><div class="lg-d" style="background:var(--civ);box-shadow:0 0 5px var(--civ)"></div>مدني</div>
       <div class="lg-i"><div class="lg-d" style="background:var(--hel);box-shadow:0 0 5px var(--hel)"></div>حوامة</div>
-      <div class="lg-i"><div class="lg-d" style="background:#bbb;box-shadow:0 0 3px rgba(255,255,255,.3)"></div>مسيّرة</div>
+      <div class="lg-i"><div class="lg-d" style="background:#bbb"></div>مسيّرة</div>
     </div>
   </div>
 
@@ -188,11 +171,11 @@ header{
         <button class="fb on" data-t="military"   onclick="toggleF(this)"><div class="fd" style="background:var(--mil);box-shadow:0 0 5px var(--mil)"></div>عسكري</button>
         <button class="fb on" data-t="civil"      onclick="toggleF(this)"><div class="fd" style="background:var(--civ);box-shadow:0 0 5px var(--civ)"></div>مدني</button>
         <button class="fb on" data-t="helicopter" onclick="toggleF(this)"><div class="fd" style="background:var(--hel);box-shadow:0 0 5px var(--hel)"></div>حوامة</button>
-        <button class="fb on" data-t="drone"      onclick="toggleF(this)"><div class="fd" style="background:#bbb;box-shadow:0 0 3px rgba(255,255,255,.3)"></div>مسيّرة</button>
+        <button class="fb on" data-t="drone"      onclick="toggleF(this)"><div class="fd" style="background:#bbb"></div>مسيّرة</button>
       </div>
     </div>
     <div class="sw">
-      <input class="si" id="srch" type="text" placeholder="بحث: callsign، دولة، ICAO..." oninput="doSearch(this.value)">
+      <input class="sinp" id="srch" type="text" placeholder="بحث: callsign، دولة، ICAO..." oninput="doSearch(this.value)">
     </div>
     <div class="lh"><span>الطائرات المرصودة</span><span class="lc" id="lcnt">0</span></div>
     <div class="al" id="aList"></div>
@@ -200,7 +183,7 @@ header{
   </div>
 </div>
 
-<div class="sb">
+<div class="statusbar">
   <div id="clk">00:00:00 UTC</div>
   <div class="si2"><span class="ok" id="cDot">●</span><span id="cTxt">جارٍ الاتصال</span></div>
   <div class="sep">|</div>
@@ -216,49 +199,48 @@ header{
 //  REGIONS
 // ═══════════════════════════════════════════════════
 const REGIONS = {
-  gulf:         {lat:26.0, lon:52.0, dist:600,  zoom:6},
-  saudi:        {lat:23.5, lon:44.0, dist:700,  zoom:6},
-  middleeast:   {lat:28.0, lon:43.0, dist:1200, zoom:5},
-  levant:       {lat:33.5, lon:39.0, dist:600,  zoom:6},
-  europe:       {lat:51.0, lon:10.0, dist:1500, zoom:5},
-  northamerica: {lat:45.0, lon:-93.0,dist:1800, zoom:4},
-  eastasia:     {lat:35.0, lon:120.0,dist:1200, zoom:5},
+  gulf:         {lat:26.0, lon:52.0, zoom:6, bb:{lamin:22,lomin:46,lamax:30,lomax:61}},
+  saudi:        {lat:23.5, lon:44.0, zoom:6, bb:{lamin:16,lomin:36,lamax:32,lomax:56}},
+  middleeast:   {lat:28.0, lon:43.0, zoom:5, bb:{lamin:12,lomin:28,lamax:42,lomax:63}},
+  levant:       {lat:33.5, lon:39.0, zoom:6, bb:{lamin:28,lomin:34,lamax:38,lomax:48}},
+  europe:       {lat:51.0, lon:10.0, zoom:5, bb:{lamin:35,lomin:-12,lamax:72,lomax:42}},
+  northamerica: {lat:45.0, lon:-93.0,zoom:4, bb:{lamin:24,lomin:-128,lamax:72,lomax:-50}},
+  eastasia:     {lat:35.0, lon:120.0,zoom:5, bb:{lamin:20,lomin:100,lamax:50,lomax:145}},
 };
 let curReg = 'gulf';
 
 // ═══════════════════════════════════════════════════
-//  API ENDPOINTS — كل الطرق بالترتيب
+//  API SOURCES — مرتبة من الأفضل للأضعيف
 // ═══════════════════════════════════════════════════
-// سيجرب كل مسار واحداً تلو الآخر حتى ينجح
-function getEndpoints(lat, lon, dist) {
-  const adsbLol   = `https://api.adsb.lol/v2/lat/${lat}/lon/${lon}/dist/${dist}`;
-  const adsbFi    = `https://opendata.adsb.fi/api/v2/lat/${lat}/lon/${lon}/dist/${dist}`;
-  const opensky   = `https://opensky-network.org/api/states/all?extended=1&lamin=${(lat-8).toFixed(1)}&lomin=${(lon-10).toFixed(1)}&lamax=${(lat+8).toFixed(1)}&lomax=${(lon+10).toFixed(1)}`;
+// نستخدم allorigins.win كـ CORS proxy — يدعم HTTPS ومجاني
+function buildSources(bb) {
+  const {lamin,lomin,lamax,lomax} = bb;
 
-  const PROXIES = [
-    'https://corsproxy.io/?',
-    'https://api.allorigins.win/raw?url=',
-    'https://thingproxy.freeboard.io/fetch/',
-    'https://proxy.cors.sh/',
+  // URLs الأصلية
+  const U = {
+    adsbfi:  `https://opendata.adsb.fi/api/v2/lat/${(lamin+lamax)/2}/lon/${(lomin+lomax)/2}/dist/600`,
+    adsbx:   `https://adsbx.org/api/v1/aircraft/json/lat/${(lamin+lamax)/2}/lon/${(lomin+lomax)/2}/dist/600/`,
+    opensky: `https://opensky-network.org/api/states/all?extended=1&lamin=${lamin}&lomin=${lomin}&lamax=${lamax}&lomax=${lomax}`,
+  };
+
+  const PX = [
+    v => `https://api.allorigins.win/raw?url=${encodeURIComponent(v)}`,
+    v => `https://corsproxy.io/?${encodeURIComponent(v)}`,
+    v => `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(v)}`,
+    v => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(v)}`,
   ];
 
   const list = [];
-  // 1) adsb.lol مباشر
-  list.push({url: adsbLol,  name:'adsb.lol',  fmt:'adsbx'});
-  // 2) adsb.fi مباشر
-  list.push({url: adsbFi,   name:'adsb.fi',   fmt:'adsbx'});
-  // 3) كل proxy مع adsb.lol
-  for (const px of PROXIES) {
-    list.push({url: px + encodeURIComponent(adsbLol), name:'adsb.lol+proxy', fmt:'adsbx'});
+
+  // adsb.fi عبر كل proxy
+  for (const px of PX) {
+    list.push({url: px(U.adsbfi), name:'adsb.fi', fmt:'adsbfi'});
   }
-  // 4) كل proxy مع adsb.fi
-  for (const px of PROXIES) {
-    list.push({url: px + encodeURIComponent(adsbFi), name:'adsb.fi+proxy', fmt:'adsbx'});
+  // OpenSky عبر كل proxy
+  for (const px of PX) {
+    list.push({url: px(U.opensky), name:'OpenSky', fmt:'opensky'});
   }
-  // 5) OpenSky عبر proxy
-  for (const px of PROXIES) {
-    list.push({url: px + encodeURIComponent(opensky), name:'OpenSky+proxy', fmt:'opensky'});
-  }
+
   return list;
 }
 
@@ -271,7 +253,7 @@ const MIL_CS = [
   'ANGEL','KING','PAVE','VALOR','SWORD','SHIELD','LANCE','MULE','JAKE',
   'RSAF','RSNF','QTAR','BAHM','UAEF','COBRA','DEMON','TALON','STORM',
   'FLASH','FURY','SHADE','NIGHT','SKULL','JOKER','RAVEN','FALCON',
-  'NATO','TOPG','BRAVO','FOXTROT','ROMEO','TANGO','INDIA','DARK',
+  'NATO','TOPG','BRAVO','ROMEO','TANGO','INDIA','DARK','EVIL',
 ];
 const MIL_HEX = [
   [0xAE0000,0xAEFFFF],[0x43C000,0x43CFFF],[0x3A8000,0x3AFFFF],
@@ -281,174 +263,123 @@ const MIL_HEX = [
 ];
 
 function isMil(hex, cs, cat) {
-  if (cat === 7) return true;
-  const n = parseInt(hex||'0', 16);
-  for (const [lo,hi] of MIL_HEX) if (n>=lo && n<=hi) return true;
-  if (cs) { const u=cs.trim().toUpperCase(); for (const p of MIL_CS) if(u.startsWith(p)) return true; }
+  if (cat===7) return true;
+  const n=parseInt(hex||'0',16);
+  for (const [lo,hi] of MIL_HEX) if(n>=lo&&n<=hi) return true;
+  if (cs){const u=cs.trim().toUpperCase();for(const p of MIL_CS)if(u.startsWith(p))return true;}
   return false;
 }
 
-function classify(ac) {
-  const cat = typeof ac.category === 'string' ? parseInt(ac.category,16) : (ac.category||0);
-  if (cat===8) return 'helicopter';
-  if (cat===14||cat===9||cat===10||cat===11||cat===12) return 'drone';
-  if (isMil(ac.hex||'', ac.cs, cat)) return 'military';
-  return 'civil';
+function classify(ac){
+  const cat=typeof ac.category==='string'?parseInt(ac.category,16):(ac.category||0);
+  if(cat===8)return'helicopter';
+  if(cat===14||cat===9||cat===10||cat===11||cat===12)return'drone';
+  if(isMil(ac.hex||'',ac.cs,cat))return'military';
+  return'civil';
 }
 
 // ═══════════════════════════════════════════════════
-//  NORMALISE raw record → internal format
+//  NORMALISE
 // ═══════════════════════════════════════════════════
-function normalise(r, fmt) {
-  if (fmt === 'opensky') {
-    // OpenSky states/all: array format
-    if (!Array.isArray(r)) return null;
-    const lat=r[6], lon=r[5];
-    if (!lat||!lon) return null;
-    return {
-      hex: (r[0]||'').toLowerCase(),
-      cs:  r[1]?r[1].trim():null,
-      lat, lon,
-      alt: r[7] ? Math.round(r[7]*3.28084) : (r[8]?0:null),
-      spd: r[9] ? Math.round(r[9]*1.944) : null,
-      trk: r[10],
-      vr:  r[11] ? Math.round(r[11]*196.85) : null,
-      sqk: r[14],
-      country: r[2],
-      model: null, reg: null,
-      category: r[17]||0,
-    };
+function norm(r, fmt){
+  if(fmt==='opensky'){
+    if(!Array.isArray(r))return null;
+    const lat=r[6],lon=r[5];
+    if(lat==null||lon==null)return null;
+    return{hex:(r[0]||'').toLowerCase(),cs:r[1]?r[1].trim():null,lat,lon,
+      alt:r[7]?Math.round(r[7]*3.28084):(r[8]?0:null),
+      spd:r[9]?Math.round(r[9]*1.944):null,trk:r[10],
+      vr:r[11]?Math.round(r[11]*196.85):null,
+      sqk:r[14],country:r[2],model:null,reg:null,category:r[17]||0};
   }
-  // ADSBx / adsb.lol / adsb.fi format
-  const lat=r.lat, lon=r.lon||r.lng;
-  if (!lat||!lon) return null;
-  const alt = r.alt_baro==='ground' ? 0 : (r.alt_baro ?? r.alt_geom ?? r.altitude ?? null);
-  return {
-    hex: (r.hex||r.icao24||'').toLowerCase(),
-    cs:  (r.flight||r.callsign||'').trim()||null,
-    lat, lon,
-    alt: typeof alt==='number' ? Math.round(alt) : alt,
-    spd: r.gs ?? r.velocity ?? null,
-    trk: r.track ?? r.true_track ?? null,
-    vr:  r.baro_rate ?? r.vert_rate ?? null,
-    sqk: r.squawk||null,
-    country: r.r_country||r.origin_country||null,
-    model: r.t||r.type_code||null,
-    reg: r.r||null,
-    category: r.category||0,
-  };
+  // adsb.fi / adsbx format
+  const lat=r.lat,lon=r.lon||r.lng;
+  if(lat==null||lon==null)return null;
+  const alt=r.alt_baro==='ground'?0:(r.alt_baro??r.alt_geom??r.altitude??null);
+  return{hex:(r.hex||r.icao24||'').toLowerCase(),
+    cs:(r.flight||r.callsign||'').trim()||null,lat,lon,
+    alt:typeof alt==='number'?Math.round(alt):alt,
+    spd:r.gs??r.velocity??null,trk:r.track??r.true_track??null,
+    vr:r.baro_rate??r.vert_rate??null,sqk:r.squawk||null,
+    country:r.r_country||r.origin_country||null,
+    model:r.t||r.type_code||null,reg:r.r||null,category:r.category||0};
 }
 
 // ═══════════════════════════════════════════════════
 //  MAP
 // ═══════════════════════════════════════════════════
-const R0 = REGIONS.gulf;
-const map = L.map('map',{center:[R0.lat,R0.lon],zoom:R0.zoom,zoomControl:false,attributionControl:false});
+const R0=REGIONS.gulf;
+const map=L.map('map',{center:[R0.lat,R0.lon],zoom:R0.zoom,zoomControl:false,attributionControl:false});
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
 L.control.zoom({position:'bottomleft'}).addTo(map);
 
-const COLORS = {military:'#ff3040',civil:'#00df6a',helicopter:'#ffd000',drone:'#cccccc'};
-const LABELS  = {military:'عسكري',civil:'مدني',helicopter:'حوامة',drone:'مسيّرة'};
+const COLORS={military:'#ff3040',civil:'#00df6a',helicopter:'#ffd000',drone:'#cccccc'};
+const LABELS={military:'عسكري',civil:'مدني',helicopter:'حوامة',drone:'مسيّرة'};
 
-let aircraft={}, markers={};
+let aircraft={},markers={};
 let filters=new Set(['military','civil','helicopter','drone']);
-let searchQ='', selId=null, timer=null, cd=15;
-let isDemoMode=false;
+let searchQ='',selId=null,timer=null,cd=15;
+let isReal=false;
 
 // ═══════════════════════════════════════════════════
-//  SVG ICONS
+//  ICONS
 // ═══════════════════════════════════════════════════
-function mkIcon(type, track) {
-  const c=COLORS[type], r=track||0;
+function mkIcon(type,track){
+  const c=COLORS[type],r=track||0;
   let body;
-  if (type==='helicopter') {
-    body=`<g transform="rotate(${r},12,12)">
-      <ellipse cx="12" cy="12" rx="3.2" ry="5" fill="${c}"/>
-      <line x1="3" y1="12" x2="21" y2="12" stroke="${c}" stroke-width="2" stroke-linecap="round"/>
-      <line x1="9" y1="7.5" x2="15" y2="7.5" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/>
-    </g>`;
-  } else if (type==='drone') {
-    body=`<g transform="rotate(${r},12,12)">
-      <rect x="8.5" y="9.5" width="7" height="5" rx="1" fill="${c}"/>
-      <line x1="3" y1="7" x2="8.5" y2="9.5" stroke="${c}" stroke-width="1.3"/>
-      <line x1="21" y1="7" x2="15.5" y2="9.5" stroke="${c}" stroke-width="1.3"/>
-      <line x1="3" y1="17" x2="8.5" y2="14.5" stroke="${c}" stroke-width="1.3"/>
-      <line x1="21" y1="17" x2="15.5" y2="14.5" stroke="${c}" stroke-width="1.3"/>
-      <circle cx="3" cy="7" r="1.8" fill="${c}"/>
-      <circle cx="21" cy="7" r="1.8" fill="${c}"/>
-      <circle cx="3" cy="17" r="1.8" fill="${c}"/>
-      <circle cx="21" cy="17" r="1.8" fill="${c}"/>
-    </g>`;
-  } else {
-    body=`<g transform="rotate(${r-90},12,12)">
-      <path d="M12 3 L14.5 9 L21 9.5 L17 13.5 L18.5 21 L12 17.5 L5.5 21 L7 13.5 L3 9.5 L9.5 9 Z" fill="${c}"/>
-    </g>`;
+  if(type==='helicopter'){
+    body=`<g transform="rotate(${r},12,12)"><ellipse cx="12" cy="12" rx="3.2" ry="5" fill="${c}"/><line x1="3" y1="12" x2="21" y2="12" stroke="${c}" stroke-width="2" stroke-linecap="round"/><line x1="9" y1="7.5" x2="15" y2="7.5" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/></g>`;
+  }else if(type==='drone'){
+    body=`<g transform="rotate(${r},12,12)"><rect x="8.5" y="9.5" width="7" height="5" rx="1" fill="${c}"/><line x1="3" y1="7" x2="8.5" y2="9.5" stroke="${c}" stroke-width="1.3"/><line x1="21" y1="7" x2="15.5" y2="9.5" stroke="${c}" stroke-width="1.3"/><line x1="3" y1="17" x2="8.5" y2="14.5" stroke="${c}" stroke-width="1.3"/><line x1="21" y1="17" x2="15.5" y2="14.5" stroke="${c}" stroke-width="1.3"/><circle cx="3" cy="7" r="1.8" fill="${c}"/><circle cx="21" cy="7" r="1.8" fill="${c}"/><circle cx="3" cy="17" r="1.8" fill="${c}"/><circle cx="21" cy="17" r="1.8" fill="${c}"/></g>`;
+  }else{
+    body=`<g transform="rotate(${r-90},12,12)"><path d="M12 3 L14.5 9 L21 9.5 L17 13.5 L18.5 21 L12 17.5 L5.5 21 L7 13.5 L3 9.5 L9.5 9 Z" fill="${c}"/></g>`;
   }
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="11" fill="none" stroke="${c}" stroke-width="1.1" opacity=".22"/>
-    ${body}</svg>`;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="none" stroke="${c}" stroke-width="1.1" opacity=".22"/>${body}</svg>`;
   return L.divIcon({html:svg,className:'',iconSize:[24,24],iconAnchor:[12,12]});
 }
 
 // ═══════════════════════════════════════════════════
 //  POPUP & DETAIL
 // ═══════════════════════════════════════════════════
-function altStr(v){
-  if(v===0||v==='ground') return 'على الأرض';
-  if(!v&&v!==0) return '—';
-  return Math.round(v).toLocaleString()+' ft';
-}
-function spdStr(v){return v?Math.round(v)+' kts':'—'}
-function trkStr(v){return v!=null?Math.round(v)+'°':'—'}
-function vrStr(v){
-  if(!v&&v!==0)return'—';
-  return(v>0?'↑ ':v<0?'↓ ':'→ ')+Math.abs(Math.round(v))+' ft/m';
-}
+function altS(v){if(v===0||v==='ground')return'على الأرض';if(!v&&v!==0)return'—';return Math.round(v).toLocaleString()+' ft'}
+function spdS(v){return v?Math.round(v)+' kts':'—'}
+function trkS(v){return v!=null?Math.round(v)+'°':'—'}
+function vrS(v){if(!v&&v!==0)return'—';return(v>0?'↑ ':v<0?'↓ ':'→ ')+Math.abs(Math.round(v))+' ft/m'}
 
 function popHtml(a){
   const c=COLORS[a.type];
-  return`<div>
-    <div class="pc">${a.cs||a.hex.toUpperCase()}
-      <span class="badge" style="border-color:${c};color:${c};background:${c}18">${LABELS[a.type]}</span>
-    </div>
-    <div class="pg">
-      <div class="pf"><div class="lb">ICAO24</div><div class="vl">${a.hex.toUpperCase()}</div></div>
-      <div class="pf"><div class="lb">الدولة</div><div class="vl sm">${a.country||'—'}</div></div>
-      <div class="pf"><div class="lb">الارتفاع</div><div class="vl" style="color:${c}">${altStr(a.alt)}</div></div>
-      <div class="pf"><div class="lb">السرعة</div><div class="vl" style="color:${c}">${spdStr(a.spd)}</div></div>
-      <div class="pf"><div class="lb">الاتجاه</div><div class="vl">${trkStr(a.trk)}</div></div>
-      <div class="pf"><div class="lb">Squawk</div><div class="vl">${a.sqk||'—'}</div></div>
-    </div>
-    ${(a.alt===0||a.alt==='ground')?'<div style="margin-top:6px;font-size:11px;color:#ffd000">⬛ على الأرض</div>':''}
-  </div>`;
+  return`<div><div class="pc">${a.cs||a.hex.toUpperCase()} <span class="badge" style="border-color:${c};color:${c};background:${c}18">${LABELS[a.type]}</span></div>
+  <div class="pg">
+    <div class="pf"><div class="lb">ICAO24</div><div class="vl">${a.hex.toUpperCase()}</div></div>
+    <div class="pf"><div class="lb">الدولة</div><div class="vl sm">${a.country||'—'}</div></div>
+    <div class="pf"><div class="lb">الارتفاع</div><div class="vl" style="color:${c}">${altS(a.alt)}</div></div>
+    <div class="pf"><div class="lb">السرعة</div><div class="vl" style="color:${c}">${spdS(a.spd)}</div></div>
+    <div class="pf"><div class="lb">الاتجاه</div><div class="vl">${trkS(a.trk)}</div></div>
+    <div class="pf"><div class="lb">Squawk</div><div class="vl">${a.sqk||'—'}</div></div>
+  </div>${(a.alt===0||a.alt==='ground')?'<div style="margin-top:6px;font-size:11px;color:#ffd000">⬛ على الأرض</div>':''}</div>`;
 }
 
 function showDetail(a){
   const c=COLORS[a.type];
   document.getElementById('dInner').innerHTML=`
-    <div class="dh"><span>تفاصيل الطائرة</span><span class="cx" onclick="closeDetail()">×</span></div>
-    <div class="dcs">
-      ${a.cs||a.hex.toUpperCase()}
-      <span class="badge" style="border-color:${c};color:${c};background:${c}18">${LABELS[a.type]}</span>
-      ${(a.alt===0||a.alt==='ground')?'<span class="badge" style="border-color:#ffd000;color:#ffd000;background:rgba(255,208,0,.09)">على الأرض</span>':''}
-    </div>
-    <div class="dg">
-      <div class="df"><div class="dlb">ICAO 24-bit</div><div class="dv">${a.hex.toUpperCase()}</div></div>
-      <div class="df"><div class="dlb">دولة التسجيل</div><div class="dv sm">${a.country||'—'}</div></div>
-      <div class="df"><div class="dlb">رقم الرحلة</div><div class="dv sm">${a.cs||'—'}</div></div>
-      <div class="df"><div class="dlb">طراز الطائرة</div><div class="dv sm">${a.model||'—'}</div></div>
-      <div class="df"><div class="dlb">الارتفاع</div><div class="dv" style="color:${c}">${altStr(a.alt)}</div></div>
-      <div class="df"><div class="dlb">السرعة</div><div class="dv" style="color:${c}">${spdStr(a.spd)}</div></div>
-      <div class="df"><div class="dlb">الاتجاه</div><div class="dv">${trkStr(a.trk)}</div></div>
-      <div class="df"><div class="dlb">صعود/نزول</div><div class="dv sm">${vrStr(a.vr)}</div></div>
-      <div class="df"><div class="dlb">Squawk</div><div class="dv">${a.sqk||'—'}</div></div>
-      <div class="df"><div class="dlb">التسجيل</div><div class="dv sm">${a.reg||'—'}</div></div>
-      <div class="df"><div class="dlb">خط العرض</div><div class="dv sm">${a.lat?a.lat.toFixed(4)+'°':'—'}</div></div>
-      <div class="df"><div class="dlb">خط الطول</div><div class="dv sm">${a.lon?a.lon.toFixed(4)+'°':'—'}</div></div>
-    </div>`;
+  <div class="dh"><span>تفاصيل الطائرة</span><span class="cx" onclick="closeDetail()">×</span></div>
+  <div class="dcs">${a.cs||a.hex.toUpperCase()} <span class="badge" style="border-color:${c};color:${c};background:${c}18">${LABELS[a.type]}</span>${(a.alt===0||a.alt==='ground')?'<span class="badge" style="border-color:#ffd000;color:#ffd000;background:rgba(255,208,0,.09)">على الأرض</span>':''}</div>
+  <div class="dg">
+    <div class="df"><div class="dlb">ICAO 24-bit</div><div class="dv">${a.hex.toUpperCase()}</div></div>
+    <div class="df"><div class="dlb">دولة التسجيل</div><div class="dv sm">${a.country||'—'}</div></div>
+    <div class="df"><div class="dlb">رقم الرحلة</div><div class="dv sm">${a.cs||'—'}</div></div>
+    <div class="df"><div class="dlb">الطراز</div><div class="dv sm">${a.model||'—'}</div></div>
+    <div class="df"><div class="dlb">الارتفاع</div><div class="dv" style="color:${c}">${altS(a.alt)}</div></div>
+    <div class="df"><div class="dlb">السرعة</div><div class="dv" style="color:${c}">${spdS(a.spd)}</div></div>
+    <div class="df"><div class="dlb">الاتجاه</div><div class="dv">${trkS(a.trk)}</div></div>
+    <div class="df"><div class="dlb">صعود/نزول</div><div class="dv sm">${vrS(a.vr)}</div></div>
+    <div class="df"><div class="dlb">Squawk</div><div class="dv">${a.sqk||'—'}</div></div>
+    <div class="df"><div class="dlb">التسجيل</div><div class="dv sm">${a.reg||'—'}</div></div>
+    <div class="df"><div class="dlb">خط العرض</div><div class="dv sm">${a.lat?a.lat.toFixed(4)+'°':'—'}</div></div>
+    <div class="df"><div class="dlb">خط الطول</div><div class="dv sm">${a.lon?a.lon.toFixed(4)+'°':'—'}</div></div>
+  </div>`;
   document.getElementById('dPanel').classList.add('open');
 }
-
 function closeDetail(){selId=null;document.getElementById('dPanel').classList.remove('open');renderList()}
 
 // ═══════════════════════════════════════════════════
@@ -458,35 +389,20 @@ function visible(a){
   if(!filters.has(a.type))return false;
   if(!searchQ)return true;
   const q=searchQ.toLowerCase();
-  return (a.cs&&a.cs.toLowerCase().includes(q))||
-         a.hex.toLowerCase().includes(q)||
-         (a.country&&a.country.toLowerCase().includes(q));
+  return(a.cs&&a.cs.toLowerCase().includes(q))||a.hex.toLowerCase().includes(q)||(a.country&&a.country.toLowerCase().includes(q));
 }
 
 function renderList(){
   const ul=document.getElementById('aList');
-  ul.innerHTML='';
-  let n=0;
-  const arr=Object.values(aircraft).sort((a,b)=>{
-    const aa=typeof a.alt==='number'?a.alt:0;
-    const ba=typeof b.alt==='number'?b.alt:0;
-    return ba-aa;
-  });
+  ul.innerHTML='';let n=0;
+  const arr=Object.values(aircraft).sort((a,b)=>{const aa=typeof a.alt==='number'?a.alt:0,ba=typeof b.alt==='number'?b.alt:0;return ba-aa});
   arr.forEach(a=>{
-    if(!visible(a))return;
-    n++;
+    if(!visible(a))return;n++;
     const c=COLORS[a.type];
-    const altD=a.alt===0||a.alt==='ground'?'GND':
-      (typeof a.alt==='number'?(a.alt/1000).toFixed(1)+'k':'—');
+    const altD=a.alt===0||a.alt==='ground'?'GND':(typeof a.alt==='number'?(a.alt/1000).toFixed(1)+'k':'—');
     const div=document.createElement('div');
     div.className='ai'+(selId===a.hex?' sel':'');
-    div.innerHTML=`
-      <div class="ab" style="background:${c}"></div>
-      <div class="an">
-        <div class="acs">${a.cs||a.hex.toUpperCase()}</div>
-        <div class="ad">${a.country||''}${a.model?' · '+a.model:''}</div>
-      </div>
-      <div class="aa" style="color:${c}">${altD}<br><span style="color:var(--dim);font-size:9px">ft</span></div>`;
+    div.innerHTML=`<div class="ab" style="background:${c}"></div><div class="an"><div class="acs">${a.cs||a.hex.toUpperCase()}</div><div class="ad">${a.country||''}${a.model?' · '+a.model:''}</div></div><div class="aa" style="color:${c}">${altD}<br><span style="color:var(--dim);font-size:9px">ft</span></div>`;
     div.onclick=()=>selectAc(a.hex);
     ul.appendChild(div);
   });
@@ -494,52 +410,30 @@ function renderList(){
 }
 
 function selectAc(id){
-  selId=id;
-  const a=aircraft[id];
-  if(!a)return;
-  if(a.lat&&a.lon) map.setView([a.lat,a.lon],Math.max(map.getZoom(),8));
-  if(markers[id]) markers[id].openPopup();
-  showDetail(a);
-  renderList();
+  selId=id;const a=aircraft[id];if(!a)return;
+  if(a.lat&&a.lon)map.setView([a.lat,a.lon],Math.max(map.getZoom(),8));
+  if(markers[id])markers[id].openPopup();
+  showDetail(a);renderList();
 }
 
 function refreshMarkers(){
-  for(const id of Object.keys(markers)){
-    if(!aircraft[id]||!visible(aircraft[id])){map.removeLayer(markers[id]);delete markers[id]}
-  }
+  for(const id of Object.keys(markers)){if(!aircraft[id]||!visible(aircraft[id])){map.removeLayer(markers[id]);delete markers[id]}}
   for(const a of Object.values(aircraft)){
-    if(!visible(a)||!a.lat||!a.lon) continue;
+    if(!visible(a)||!a.lat||!a.lon)continue;
     const icon=mkIcon(a.type,a.trk);
-    if(markers[a.hex]){
-      markers[a.hex].setLatLng([a.lat,a.lon]);
-      markers[a.hex].setIcon(icon);
-      markers[a.hex].setPopupContent(popHtml(a));
-    } else {
-      const m=L.marker([a.lat,a.lon],{icon,title:a.cs||a.hex});
-      m.bindPopup(popHtml(a),{maxWidth:250,className:''});
-      m.on('click',()=>selectAc(a.hex));
-      m.addTo(map);
-      markers[a.hex]=m;
-    }
+    if(markers[a.hex]){markers[a.hex].setLatLng([a.lat,a.lon]);markers[a.hex].setIcon(icon);markers[a.hex].setPopupContent(popHtml(a));}
+    else{const m=L.marker([a.lat,a.lon],{icon,title:a.cs||a.hex});m.bindPopup(popHtml(a),{maxWidth:250,className:''});m.on('click',()=>selectAc(a.hex));m.addTo(map);markers[a.hex]=m;}
   }
 }
 
 // ═══════════════════════════════════════════════════
-//  PROCESS DATA
+//  PROCESS
 // ═══════════════════════════════════════════════════
-function processRaw(rawArr, fmt, srcName){
+function processRaw(rawArr,fmt,srcName){
   aircraft={};
   for(const id of Object.keys(markers)){map.removeLayer(markers[id]);delete markers[id]}
-
   const cnt={military:0,civil:0,helicopter:0,drone:0};
-  for(const r of rawArr){
-    const a=normalise(r, fmt);
-    if(!a||!a.hex)continue;
-    a.type=classify(a);
-    aircraft[a.hex]=a;
-    cnt[a.type]++;
-  }
-
+  for(const r of rawArr){const a=norm(r,fmt);if(!a||!a.hex)continue;a.type=classify(a);aircraft[a.hex]=a;cnt[a.type]++;}
   const tot=Object.keys(aircraft).length;
   document.getElementById('st0').textContent=tot;
   document.getElementById('st1').textContent=cnt.military;
@@ -547,163 +441,117 @@ function processRaw(rawArr, fmt, srcName){
   document.getElementById('st3').textContent=cnt.helicopter;
   document.getElementById('st4').textContent=cnt.drone;
   document.getElementById('acC').textContent=tot+' طائرة';
-
-  const srcEl=document.getElementById('srcB');
-  srcEl.textContent=srcName;
-  srcEl.className=isDemoMode?'demo':'';
-
+  const sb=document.getElementById('srcB');sb.textContent=srcName;sb.className=isReal?'':'demo';
   refreshMarkers();renderList();
 }
 
 // ═══════════════════════════════════════════════════
-//  FETCH — يجرب كل endpoint واحداً تلو الآخر
+//  FETCH
 // ═══════════════════════════════════════════════════
-async function tryFetch(ep){
+async function tryOne(ep){
   const ctl=new AbortController();
-  const tid=setTimeout(()=>ctl.abort(),8000);
+  const tid=setTimeout(()=>ctl.abort(),9000);
   try{
-    const res=await fetch(ep.url,{signal:ctl.signal,mode:'cors'});
+    const res=await fetch(ep.url,{signal:ctl.signal});
     clearTimeout(tid);
     if(!res.ok)throw new Error('http-'+res.status);
-    const data=await res.json();
-    // extract array
+    const txt=await res.text();
+    // allorigins sometimes wraps in {contents:"..."}
+    let data;
+    try{data=JSON.parse(txt);}catch{throw new Error('bad-json')}
+    if(data.contents){try{data=JSON.parse(data.contents);}catch{throw new Error('bad-wrap')}}
     let raw=null;
-    if(ep.fmt==='opensky'){
-      if(data.states&&Array.isArray(data.states)) raw=data.states;
-    } else {
-      raw=data.ac||data.aircraft||data.data||null;
-      if(!raw&&Array.isArray(data)) raw=data;
-    }
-    if(!raw||!Array.isArray(raw)||raw.length===0) throw new Error('empty');
-    return {raw,fmt:ep.fmt,name:ep.name};
-  } catch(e){
-    clearTimeout(tid);
-    throw e;
-  }
+    if(ep.fmt==='opensky'){if(data.states&&Array.isArray(data.states))raw=data.states;}
+    else{raw=data.ac||data.aircraft||data.data||null;if(!raw&&Array.isArray(data))raw=data;}
+    if(!raw||!Array.isArray(raw)||raw.length===0)throw new Error('empty');
+    return{raw,fmt:ep.fmt,name:ep.name};
+  }catch(e){clearTimeout(tid);throw e;}
 }
 
 async function fetchAll(){
-  const r=REGIONS[curReg];
-  const endpoints=getEndpoints(r.lat,r.lon,r.dist);
-  for(const ep of endpoints){
-    document.getElementById('ldSub').textContent='جارٍ تجربة: '+ep.name+'...';
-    try{
-      const res=await tryFetch(ep);
-      isDemoMode=false;
-      document.getElementById('demoBanner').classList.remove('s');
-      return res;
-    } catch(e){ /* try next */ }
+  const bb=REGIONS[curReg].bb;
+  const sources=buildSources(bb);
+  for(let i=0;i<sources.length;i++){
+    const ep=sources[i];
+    document.getElementById('ldSub').textContent=`[${i+1}/${sources.length}] ${ep.name}...`;
+    try{const r=await tryOne(ep);return r;}catch(e){}
   }
-  return null; // كل المصادر فشلت → وضع Demo
+  return null;
 }
 
 // ═══════════════════════════════════════════════════
-//  DEMO DATA — بيانات وهمية واقعية للخليج
+//  DEMO DATA
 // ═══════════════════════════════════════════════════
-function generateDemo(){
-  const r=REGIONS[curReg];
+function makeDemo(){
+  const reg=REGIONS[curReg];
+  const {lamin,lomin,lamax,lomax}=reg.bb;
   const types=['civil','civil','civil','civil','military','helicopter','drone'];
-  const cs_mil=['REACH301','EAGLE21','RCH456','DUKE99','VIPER11','MAGIC31','RSAF01'];
-  const cs_civ=['SVA123','UAE456','QTR789','NAS321','FBA654','MSR987','BAH111','UAE002'];
-  const models_civ=['Boeing 737-800','Airbus A320','Boeing 777','Airbus A380','Boeing 787'];
-  const countries=['Saudi Arabia','UAE','Qatar','Kuwait','Bahrain','Egypt','Jordan','Iraq'];
-  const demo=[];
+  const milCS=['REACH301','EAGLE21','RCH456','DUKE99','VIPER11','MAGIC31','RSAF01','HAWK55'];
+  const civCS=['SVA123','UAE456','QTR789','NAS321','FBA654','MSR987','BAH111','UAE002','GFA501'];
+  const mods=['Boeing 737-800','Airbus A320','Boeing 777','Airbus A380','Boeing 787','Airbus A350'];
+  const cntrs=['Saudi Arabia','UAE','Qatar','Kuwait','Bahrain','Egypt','Jordan','Iraq','Oman'];
+  const arr=[];
   for(let i=0;i<50;i++){
-    const type=types[Math.floor(Math.random()*types.length)];
-    const dlat=r.lat+(Math.random()-0.5)*12;
-    const dlon=r.lon+(Math.random()-0.5)*14;
-    demo.push({
+    const type=types[i%types.length];
+    arr.push({
       hex:Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0'),
-      cs: type==='military'?cs_mil[i%cs_mil.length]:
-          type==='civil'?cs_civ[i%cs_civ.length]:
-          type==='helicopter'?'HELI'+(10+i):
-          'UAV'+(100+i),
-      lat:dlat, lon:dlon,
-      alt:type==='helicopter'?Math.floor(Math.random()*3000+500):
-          type==='drone'?Math.floor(Math.random()*20000+10000):
-          Math.floor(Math.random()*13000+25000),
-      spd:type==='helicopter'?Math.floor(Math.random()*120+80):
-          Math.floor(Math.random()*200+380),
-      trk:Math.floor(Math.random()*360),
-      vr: (Math.random()-0.5)*1000,
+      cs:type==='military'?milCS[i%milCS.length]:type==='civil'?civCS[i%civCS.length]:type==='helicopter'?'HELI'+(10+i):'UAV'+(100+i),
+      lat:lamin+(Math.random()*(lamax-lamin)),lon:lomin+(Math.random()*(lomax-lomin)),
+      alt:type==='helicopter'?800+Math.floor(Math.random()*3000):type==='drone'?12000+Math.floor(Math.random()*18000):25000+Math.floor(Math.random()*14000),
+      spd:type==='helicopter'?90+Math.floor(Math.random()*110):380+Math.floor(Math.random()*200),
+      trk:Math.floor(Math.random()*360),vr:(Math.random()-0.5)*800,
       sqk:(1000+Math.floor(Math.random()*6777)).toString(),
-      country:countries[i%countries.length],
-      model:type==='civil'?models_civ[i%models_civ.length]:null,
-      reg:null,
-      category:type==='helicopter'?8:type==='drone'?14:0,
+      country:cntrs[i%cntrs.length],model:type==='civil'?mods[i%mods.length]:null,
+      reg:null,category:type==='helicopter'?8:type==='drone'?14:0,
     });
   }
-  return demo;
+  return arr;
 }
 
 // ═══════════════════════════════════════════════════
-//  UPDATE CYCLE
+//  UPDATE
 // ═══════════════════════════════════════════════════
 async function update(){
   const result=await fetchAll();
+  const banner=document.getElementById('modeBanner');
   if(result){
-    processRaw(result.raw, result.fmt, result.name);
-    setConn(true);
-  } else {
-    // وضع Demo
-    isDemoMode=true;
-    const demo=generateDemo();
-    processRaw(demo,'adsbx','عرض تجريبي');
-    document.getElementById('demoBanner').classList.add('s');
-    setConn(false);
+    isReal=true;
+    processRaw(result.raw,result.fmt,result.name);
+    document.getElementById('cDot').className='ok';
+    document.getElementById('cTxt').textContent='✅ بيانات حقيقية — '+result.name;
+    banner.className='real';banner.textContent='✅ بيانات ADS-B حقيقية — '+result.name;
+    setTimeout(()=>banner.className='',4000);
+  }else{
+    isReal=false;
+    processRaw(makeDemo(),'adsbfi','عرض تجريبي');
+    document.getElementById('cDot').className='wa';
+    document.getElementById('cTxt').textContent='⚠️ وضع تجريبي — تعذّر الاتصال';
+    banner.className='demo';banner.textContent='⚠️ بيانات تجريبية — تعذّر الوصول للـ API';
   }
   document.getElementById('load').classList.add('h');
 }
 
 const REFRESH=15;
 function startTimer(){
-  if(timer)clearInterval(timer);
-  cd=REFRESH;
-  timer=setInterval(()=>{
-    cd--;
-    document.getElementById('cdTxt').textContent=cd+'s';
-    if(cd<=0){cd=REFRESH;update();}
-  },1000);
+  if(timer)clearInterval(timer);cd=REFRESH;
+  timer=setInterval(()=>{cd--;document.getElementById('cdTxt').textContent=cd+'s';if(cd<=0){cd=REFRESH;update();}},1000);
 }
 
-// ═══════════════════════════════════════════════════
-//  UI
-// ═══════════════════════════════════════════════════
-function setConn(ok){
-  document.getElementById('cDot').className=ok?'ok':'wa';
-  document.getElementById('cTxt').textContent=ok?'متصل — بيانات حقيقية':'وضع تجريبي — لا يوجد اتصال';
-}
-function toggleF(btn){
-  const t=btn.dataset.t;
-  if(filters.has(t)){filters.delete(t);btn.classList.remove('on')}
-  else{filters.add(t);btn.classList.add('on')}
-  refreshMarkers();renderList();
-}
+function toggleF(btn){const t=btn.dataset.t;if(filters.has(t)){filters.delete(t);btn.classList.remove('on')}else{filters.add(t);btn.classList.add('on')}refreshMarkers();renderList()}
 function doSearch(v){searchQ=v.trim();refreshMarkers();renderList()}
 function changeRegion(){
-  curReg=document.getElementById('regSel').value;
-  const r=REGIONS[curReg];
+  curReg=document.getElementById('regSel').value;const r=REGIONS[curReg];
   map.setView([r.lat,r.lon],r.zoom);
   document.getElementById('load').classList.remove('h');
   document.getElementById('ldTxt').textContent='جارٍ تحميل البيانات...';
   document.getElementById('ldSub').textContent='';
   for(const id of Object.keys(markers)){map.removeLayer(markers[id]);delete markers[id]}
-  aircraft={};renderList();
-  update();
+  aircraft={};renderList();update();
 }
 
-function tick(){
-  const d=new Date();
-  document.getElementById('clk').textContent=
-    String(d.getUTCHours()).padStart(2,'0')+':'+
-    String(d.getUTCMinutes()).padStart(2,'0')+':'+
-    String(d.getUTCSeconds()).padStart(2,'0')+' UTC';
-}
+function tick(){const d=new Date();document.getElementById('clk').textContent=String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')+':'+String(d.getUTCSeconds()).padStart(2,'0')+' UTC'}
 setInterval(tick,1000);tick();
 
-// ═══════════════════════════════════════════════════
-//  BOOT
-// ═══════════════════════════════════════════════════
 update().then(()=>startTimer());
 </script>
 </body>
