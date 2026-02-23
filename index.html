@@ -108,7 +108,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
     <div class="stat"><div class="sn" id="st4" style="color:#aaa">—</div><div class="sl">مسيّرة</div></div>
   </div>
   <div class="live"><div class="dot"></div>LIVE</div>
-  <button id="srcToggle" onclick="toggleSource()" style="background:rgba(0,200,240,.12);border:1px solid rgba(0,200,240,.35);color:#00c8f0;padding:4px 11px;border-radius:4px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Tajawal',sans-serif;">adsb.lol ⚡</button>
+
 </header>
 
 <div class="main">
@@ -173,9 +173,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 <script>
 // ═══════ WORKER URL مضمّن مباشرة ═══════
 var WORKER = "https://lucky-frog-9ff0.ahmedjassim300.workers.dev";
-var curSource = "adsb";
-var REFRESH_ADSB = 15;
-var REFRESH_OPENSKY = 30;
 
 var REGIONS = {
   world:        {lat:30,   lon:20,  zoom:2},
@@ -375,27 +372,9 @@ function processRaw(rawArr, srcName) {
   renderList();
 }
 
-function toggleSource() {
-  if (curSource === "adsb") {
-    curSource = "opensky";
-    document.getElementById("srcToggle").textContent = "OpenSky 🛰️";
-    document.getElementById("srcToggle").style.background = "rgba(255,208,0,.12)";
-    document.getElementById("srcToggle").style.borderColor = "rgba(255,208,0,.35)";
-    document.getElementById("srcToggle").style.color = "#ffd000";
-  } else {
-    curSource = "adsb";
-    document.getElementById("srcToggle").textContent = "adsb.lol ⚡";
-    document.getElementById("srcToggle").style.background = "rgba(0,200,240,.12)";
-    document.getElementById("srcToggle").style.borderColor = "rgba(0,200,240,.35)";
-    document.getElementById("srcToggle").style.color = "#00c8f0";
-  }
-  if (timer) clearInterval(timer);
-  update().then(function(){ startTimer(); });
-}
-
 async function update() {
   try {
-    var url = WORKER + "/?region=" + curReg + "&source=" + curSource;
+    var url = WORKER + "/?region=" + curReg;
     var resp = await fetch(url);
     if (!resp.ok) throw new Error("http");
     var data = await resp.json();
@@ -444,15 +423,14 @@ async function update() {
   document.getElementById("load").classList.add("h");
 }
 
-var REFRESH = 15; // dynamic
+var REFRESH = 15;
 function startTimer() {
   if (timer) clearInterval(timer);
-  var ref = curSource === "opensky" ? REFRESH_OPENSKY : REFRESH_ADSB;
-  cd = ref;
+  cd = 15;
   timer = setInterval(function(){
     cd--;
     document.getElementById("cdTxt").textContent = cd + "s";
-    if (cd <= 0) { cd = curSource === "opensky" ? REFRESH_OPENSKY : REFRESH_ADSB; update(); }
+    if (cd <= 0) { cd = 15; update(); }
   }, 1000);
 }
 
