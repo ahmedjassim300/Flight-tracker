@@ -24,10 +24,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .emg-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(255,96,0,.95);color:#fff;text-align:center;padding:8px;font-size:13px;font-weight:700;animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
 .main{display:flex;flex:1;overflow:hidden}
-#map{flex:1;position:relative}
+#map{flex:1;position:relative;width:100%!important}
 .leaflet-container{background:#04080e!important}
 .leaflet-tile{filter:brightness(.22) saturate(.35) hue-rotate(185deg) invert(1)!important}
-.sidebar{width:280px;flex-shrink:0;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow-y:auto}
+.sidebar{display:none!important}
 .rw{padding:9px 11px;border-bottom:1px solid var(--bd)}
 .rl{font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);margin-bottom:4px}
 .rs{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:5px;padding:6px 8px;color:var(--tx);font-family:'Tajawal',sans-serif;font-size:12px;outline:none;cursor:pointer;appearance:none}
@@ -114,7 +114,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 @keyframes spin{to{transform:rotate(360deg)}}
 .lt{font-size:12px;color:var(--tx)}
 #load.h{display:none}
-#modeBanner{display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);padding:4px 12px;border-radius:4px;font-size:10px;z-index:2000;white-space:nowrap}
+#modeBanner{display:none;position:absolute;bottom:30px;left:50%;transform:translateX(-50%);padding:3px 10px;border-radius:4px;font-size:9px;z-index:2000;white-space:nowrap;pointer-events:none}
 #modeBanner.real{display:block;background:rgba(0,223,106,.12);border:1px solid rgba(0,223,106,.35);color:var(--civ)}
 #modeBanner.demo{display:block;background:rgba(255,160,0,.12);border:1px solid rgba(255,160,0,.35);color:#ffa000}
 /* ISS marker */
@@ -167,6 +167,26 @@ body.theme-mil{--bg:#060a04;--sf:#0a100a;--sf2:#0d150a;--bd:#1a2e14;--ac:#4aff40
 }
 /* Tracked dot */
 .tdot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--ac);margin-left:3px;animation:blink .8s infinite;vertical-align:middle}
+/* Country flag */
+.flag{font-size:13px;margin-left:3px}
+/* Timer badge */
+.timer-badge{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dim);margin-top:1px}
+/* Map tool buttons */
+.map-tools{position:absolute;top:12px;left:12px;z-index:500;display:flex;flex-direction:column;gap:5px}
+.mt-btn{width:34px;height:34px;background:rgba(8,14,22,.93);border:1px solid var(--bd);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--tx);transition:all .2s;backdrop-filter:blur(10px)}
+.mt-btn:hover{background:rgba(0,200,240,.15);border-color:var(--ac);color:var(--ac)}
+.mt-btn.active{background:rgba(0,200,240,.2);border-color:var(--ac);color:var(--ac)}
+/* Model DB */
+.model-card{background:var(--sf2);border:1px solid var(--bd);border-radius:6px;padding:9px;margin:8px 11px}
+.model-name{font-size:13px;color:#fff;font-weight:700;margin-bottom:5px}
+.model-specs{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.model-spec{font-size:10px;color:var(--dim)}.model-spec span{color:var(--tx)}
+/* Fav item */
+.fav-item{display:flex;align-items:center;justify-content:space-between;padding:5px 11px;border-bottom:1px solid rgba(24,48,74,.3);font-size:11px;cursor:pointer}
+.fav-item:hover{background:var(--sf2)}
+.fav-del{color:var(--mil);font-size:14px;cursor:pointer;padding:0 4px}
+/* Print */
+@media print{.sidebar,.statusbar,.mob-bar,.map-tools,.zoom-btns,.leg{display:none!important}#map{width:100vw!important;height:100vh!important}}
 /* Airline info in detail */
 .airline-bar{display:flex;align-items:center;gap:8px;background:var(--sf);border:1px solid var(--bd);border-radius:4px;padding:5px 7px;margin-bottom:5px}
 .airline-logo{font-size:20px}.airline-name{font-size:11px;color:var(--tx)}
@@ -208,7 +228,12 @@ body.theme-mil{--bg:#060a04;--sf:#0a100a;--sf2:#0d150a;--bd:#1a2e14;--ac:#4aff40
   <div id="map">
     <canvas id="heatCanvas"></canvas>
     <div id="load"><div class="sp"></div><div class="lt">جارٍ تحميل البيانات...</div></div>
-    <div id="modeBanner"></div>
+    <div class="map-tools">
+      <div class="mt-btn" onclick="toggleCircleMode(this)" id="circleBtn" title="رسم دائرة مراقبة">🎯</div>
+      <div class="mt-btn" onclick="toggleDistMode(this)" id="distBtn" title="قياس المسافة">📏</div>
+      <div class="mt-btn" onclick="printMap()" title="طباعة الخريطة">🖨️</div>
+      <div class="mt-btn" onclick="saveFav()" title="حفظ موقع مفضل">📌</div>
+    </div>
     <div class="leg">
       <div class="lg-t">الأنواع</div>
       <div class="lg-i"><div class="lg-d" style="background:var(--mil)"></div>عسكري</div>
@@ -219,23 +244,45 @@ body.theme-mil{--bg:#060a04;--sf:#0a100a;--sf2:#0d150a;--bd:#1a2e14;--ac:#4aff40
       <div class="lg-i"><div class="lg-d" style="background:#4488ff"></div>سفينة</div>
       <div class="lg-i"><div class="lg-d" style="background:#888"></div>محطة ADS-B</div>
     </div>
-  </div>
 
-  <div class="sidebar">
-    <div class="sb-tabs">
-      <div class="sb-tab active" onclick="showTab(0)">🗺️ خريطة</div>
-      <div class="sb-tab" onclick="showTab(1)">👁️ مراقبة</div>
-      <div class="sb-tab" onclick="showTab(2)">📋 سجل</div>
-      <div class="sb-tab" onclick="showTab(3)">📊 إحصاء</div>
+    <!-- لوحة قائمة الطائرات العائمة -->
+    <div id="acPanel" style="position:absolute;top:12px;right:12px;z-index:500;width:270px;background:rgba(8,14,22,.95);border:1px solid var(--bd);border-radius:8px;backdrop-filter:blur(12px);display:flex;flex-direction:column;max-height:calc(100% - 24px)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--bd);flex-shrink:0">
+        <span style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--dim)">الطائرات</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--ac)" id="lcnt">0</span>
+      </div>
+      <div style="padding:6px 8px;border-bottom:1px solid var(--bd);flex-shrink:0">
+        <input class="sinp" style="width:100%" id="srch" type="text" placeholder="بحث..." oninput="doSearch(this.value)">
+      </div>
+      <div class="al" id="aList" style="overflow-y:auto;max-height:320px;scrollbar-width:thin;scrollbar-color:var(--bd) transparent"></div>
+      <div class="dp" id="dPanel"><div class="di" id="dInner"></div></div>
     </div>
-
-    <!-- TAB 0: MAP -->
-    <div class="sb-pane active" id="tab0" style="overflow-y:auto">
-    <!-- Region -->
-    <div class="rw">
-      <div class="rl">منطقة المراقبة</div>
-      <select class="rs" id="regSel" onchange="changeRegion()">
-        <option value="world">🌍 العالم كله</option>
+    <!-- لوحة التحكم العائمة -->
+    <div id="ctrlPanel" style="position:absolute;top:12px;left:56px;z-index:500;width:220px;background:rgba(8,14,22,.95);border:1px solid var(--bd);border-radius:8px;backdrop-filter:blur(12px);display:none;flex-direction:column;max-height:calc(100% - 24px);overflow-y:auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--bd);flex-shrink:0">
+        <span id="ctrlTitle" style="font-size:10px;color:var(--ac)">الإعدادات</span>
+        <span onclick="closeCtrl()" style="cursor:pointer;color:var(--dim);font-size:16px">×</span>
+      </div>
+      <div id="ctrlBody"></div>
+    </div>
+    <!-- أزرار أدوات اليسار -->
+    <div style="position:absolute;top:12px;left:12px;z-index:500;display:flex;flex-direction:column;gap:5px">
+      <div class="mt-btn" onclick="openCtrl('layers')" title="الطبقات">🗂️</div>
+      <div class="mt-btn" onclick="openCtrl('filters')" title="تصفية">🔽</div>
+      <div class="mt-btn" onclick="openCtrl('alert')" title="تنبيه طراز">🔔</div>
+      <div class="mt-btn" onclick="openCtrl('region')" title="المنطقة">🌍</div>
+      <div class="mt-btn" onclick="openCtrl('watch')" title="مراقبة ICAO">👁️</div>
+      <div class="mt-btn" onclick="openCtrl('log')" title="سجل الرحلات">📋</div>
+      <div class="mt-btn" onclick="openCtrl('stats')" title="إحصاءات">📊</div>
+      <div class="mt-btn" onclick="openCtrl('fav')" title="مفضلة">📌</div>
+      <div class="mt-btn" onclick="toggleCircleMode(this)" id="circleBtn" title="دائرة مراقبة">🎯</div>
+      <div class="mt-btn" onclick="toggleDistMode(this)" id="distBtn" title="قياس مسافة">📏</div>
+      <div class="mt-btn" onclick="printMap()" title="طباعة">🖨️</div>
+    </div>
+    <!-- عناصر مخفية -->
+    <div style="display:none">
+      <select id="regSel" onchange="changeRegion()">
+        <option value="world">العالم كله</option>
         <option value="gulf" selected>الخليج العربي</option>
         <option value="saudi">المملكة العربية السعودية</option>
         <option value="middleeast">الشرق الأوسط</option>
@@ -244,81 +291,13 @@ body.theme-mil{--bg:#060a04;--sf:#0a100a;--sf2:#0d150a;--bd:#1a2e14;--ac:#4aff40
         <option value="northamerica">أمريكا الشمالية</option>
         <option value="eastasia">شرق آسيا</option>
       </select>
-    </div>
-
-    <!-- Layers -->
-    <div class="layers-panel">
-      <div class="layers-title">طبقات الخريطة</div>
-      <div class="layer-row"><span class="layer-label">✈️ الطائرات</span><div class="toggle on" id="lyr-planes" onclick="toggleLayer('planes',this)"></div></div>
-      <div class="layer-row"><span class="layer-label">🚢 السفن</span><div class="toggle" id="lyr-ships" onclick="toggleLayer('ships',this)"></div></div>
-      <div class="layer-row"><span class="layer-label">🛰️ الأقمار الصناعية</span><div class="toggle" id="lyr-sats" onclick="toggleLayer('sats',this)"></div></div>
-      <div class="layer-row"><span class="layer-label">🌍 محطة ISS</span><div class="toggle" id="lyr-iss" onclick="toggleLayer('iss',this)"></div></div>
-      <div class="layer-row"><span class="layer-label">📡 محطات ADS-B</span><div class="toggle" id="lyr-adsb" onclick="toggleLayer('adsb',this)"></div></div>
-      <div class="layer-row"><span class="layer-label">🚫 مناطق الحظر</span><div class="toggle" id="lyr-nfz" onclick="toggleLayer('nfz',this)"></div></div>
-      <div class="layer-row"><span class="layer-label">🌡️ خريطة حرارية</span><div class="toggle" id="lyr-heat" onclick="toggleLayer('heat',this)"></div></div>
-    </div>
-
-    <!-- Filters -->
-    <div class="fw">
-      <div class="fl">تصفية الطائرات</div>
-      <div class="fg">
-        <button class="fb on" data-t="military"  onclick="toggleF(this)"><div class="fd" style="background:var(--mil)"></div>عسكري</button>
-        <button class="fb on" data-t="civil"     onclick="toggleF(this)"><div class="fd" style="background:var(--civ)"></div>مدني</button>
-        <button class="fb on" data-t="helicopter"onclick="toggleF(this)"><div class="fd" style="background:var(--hel)"></div>حوامة</button>
-        <button class="fb on" data-t="emergency" onclick="toggleF(this)"><div class="fd" style="background:var(--emg)"></div>طوارئ</button>
-      </div>
-    </div>
-
-    <!-- Alert -->
-    <div class="alert-row">
-      <input class="alert-inp" id="alertInp" type="text" placeholder="تنبيه عند ظهور: F16, B52, A388...">
-      <button class="alert-btn" onclick="setAlert()">🔔 تفعيل</button>
-    </div>
-
-    <!-- Search -->
-    <div class="sw">
-      <input class="sinp" id="srch" type="text" placeholder="بحث: callsign، دولة، ICAO..." oninput="doSearch(this.value)">
-    </div>
-    <div class="lh"><span>الطائرات المرصودة</span><span class="lc" id="lcnt">0</span></div>
-    <div class="al" id="aList"></div>
-    <div class="dp" id="dPanel"><div class="di" id="dInner"></div></div>
-    </div>
-
-    <!-- TAB 1: WATCH & TRACK -->
-    <div class="sb-pane" id="tab1" style="overflow-y:auto">
-      <div style="padding:7px 11px;font-size:10px;color:var(--dim);border-bottom:1px solid var(--bd)">تنبيه فوري عند رصد ICAO محدد</div>
-      <div style="display:flex;gap:5px;padding:7px 11px;border-bottom:1px solid var(--bd)">
-        <input class="winp" id="watchInp" type="text" placeholder="ICAO hex e.g. 896620">
-        <button class="wadd" onclick="addWatch()">+ إضافة</button>
-      </div>
-      <div id="watchListEl"></div>
-      <div style="padding:7px 11px;font-size:10px;color:var(--dim);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)">📍 الطائرات المتتبعة حالياً:</div>
-      <div id="trackedListEl"></div>
-    </div>
-
-    <!-- TAB 2: LOG -->
-    <div class="sb-pane" id="tab2" style="overflow-y:auto">
-      <div style="padding:7px 11px;font-size:10px;color:var(--dim);border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
-        <span>سجل الرحلات للجلسة</span><span id="logCount" style="color:var(--ac);font-family:'Share Tech Mono',monospace">0</span>
-      </div>
-      <button class="log-export" onclick="exportCSV()">⬇️ تصدير CSV</button>
-      <div id="logListEl"></div>
-    </div>
-
-    <!-- TAB 3: STATS/CHART -->
-    <div class="sb-pane" id="tab3" style="overflow-y:auto">
-      <div class="chart-wrap">
-        <div class="chart-title"><span>عدد الطائرات — آخر ساعة</span><span id="chartNow" style="color:var(--ac)">—</span></div>
-        <canvas id="chartCanvas"></canvas>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title"><span>🗓️ اليوم مقابل أمس</span></div>
-        <canvas id="chartCanvas2"></canvas>
-      </div>
-      <div style="padding:9px 11px">
-        <div class="rl" style="margin-bottom:8px">أكثر الدول طائرات</div>
-        <div id="countryStats"></div>
-      </div>
+      <input id="alertInp" type="text"><input id="watchInp" type="text">
+      <div id="watchListEl"></div><div id="trackedListEl"></div>
+      <div id="logListEl"></div><span id="logCount">0</span>
+      <div id="countryStats"></div>
+      <canvas id="chartCanvas"></canvas><canvas id="chartCanvas2"></canvas>
+      <span id="chartNow"></span>
+      <div id="favListEl"></div><div id="zoneListEl"></div><div id="distResultEl"></div>
     </div>
   </div>
 </div>
@@ -469,16 +448,19 @@ function showDetail(a){
   var isTracked=trackedIds.has(a.hex);
   var airlineInfo=getAirlineInfo(a.cs);
   var airlineHtml=airlineInfo?"<div class='airline-bar'><span class='airline-logo'>✈️</span><span class='airline-name'>"+airlineInfo+"</span></div>":"";
+  var modelInfo=getModelInfo(a.model);
+  var modelHtml=modelCardHtml(modelInfo,a.model);
+  var flag=getFlag(a.country);
   document.getElementById("dInner").innerHTML=
     "<div class='dh'><span>تفاصيل الطائرة</span><span class='cx' onclick='closeDetail()'>×</span></div>"+
     airlineHtml+
     "<button class='track-btn"+(isTracked?" active":"")+"' onclick='toggleTrack(\""+a.hex+"\")'>"+
     (isTracked?"⏹ إيقاف التتبع":"📍 تتبع مسار الطائرة")+"</button>"+
-    "<div class='dcs'>"+(a.cs||a.hex.toUpperCase())+" <span class='badge' style='border-color:"+c+";color:"+c+";background:"+c+"18'>"+LABELS[a.type]+"</span>"+
+    "<div class='dcs'>"+flag+" "+(a.cs||a.hex.toUpperCase())+" <span class='badge' style='border-color:"+c+";color:"+c+";background:"+c+"18'>"+LABELS[a.type]+"</span>"+
     (a.type==="emergency"?"<span class='badge' style='border-color:#ff6000;color:#ff6000;background:rgba(255,96,0,.1)'>🚨 SQUAWK "+a.sqk+"</span>":"")+"</div>"+
     "<div class='dg'>"+
     "<div class='df'><div class='dlb'>ICAO 24-bit</div><div class='dv'>"+a.hex.toUpperCase()+"</div></div>"+
-    "<div class='df'><div class='dlb'>دولة التسجيل</div><div class='dv sm'>"+(a.country||"—")+"</div></div>"+
+    "<div class='df'><div class='dlb'>دولة التسجيل</div><div class='dv sm'>"+flag+" "+(a.country||"—")+"</div></div>"+
     "<div class='df'><div class='dlb'>رقم الرحلة</div><div class='dv sm'>"+(a.cs||"—")+"</div></div>"+
     "<div class='df'><div class='dlb'>الطراز</div><div class='dv sm'>"+(a.model||"—")+"</div></div>"+
     "<div class='df'><div class='dlb'>الارتفاع</div><div class='dv' style='color:"+c+"'>"+altS(a.alt)+"</div></div>"+
@@ -486,8 +468,9 @@ function showDetail(a){
     "<div class='df'><div class='dlb'>الاتجاه</div><div class='dv'>"+trkS(a.trk)+"</div></div>"+
     "<div class='df'><div class='dlb'>صعود/نزول</div><div class='dv sm'>"+vrS(a.vr)+"</div></div>"+
     "<div class='df'><div class='dlb'>Squawk</div><div class='dv'>"+(a.sqk||"—")+"</div></div>"+
-    "<div class='df'><div class='dlb'>التسجيل</div><div class='dv sm'>"+(a.reg||"—")+"</div></div>"+
-    "</div>";
+    "<div class='df'><div class='dlb'>⏱ في الهواء</div><div class='dv sm'>"+getTimer(a.hex)+"</div></div>"+
+    "</div>"+
+    modelHtml;
   document.getElementById("dPanel").classList.add("open");
 }
 function closeDetail(){selId=null;document.getElementById("dPanel").classList.remove("open");renderList();}
@@ -586,7 +569,9 @@ function renderList(){
     var altD=a.alt===0||a.alt==="ground"?"GND":(typeof a.alt==="number"?(a.alt/1000).toFixed(1)+"k":"—");
     var div=document.createElement("div");
     div.className="ai"+(a.type==="emergency"?" emg":"")+(selId===a.hex?" sel":"");
-    div.innerHTML="<div class='ab' style='background:"+c+"'></div><div class='an'><div class='acs'>"+(a.cs||a.hex.toUpperCase())+"</div><div class='ad'>"+(a.country||"")+(a.model?" · "+a.model:"")+"</div></div><div class='aa' style='color:"+c+"'>"+altD+"<br><span style='color:var(--dim);font-size:8px'>ft</span></div>";
+    var flag=getFlag(a.country);
+    var timerTxt=getTimer(a.hex);
+    div.innerHTML="<div class='ab' style='background:"+c+"'></div><div class='an'><div class='acs'>"+flag+" "+(a.cs||a.hex.toUpperCase())+"</div><div class='ad'>"+(a.country||"")+(a.model?" · "+a.model:"")+"</div><div class='timer-badge'>⏱ "+timerTxt+"</div></div><div class='aa' style='color:"+c+"'>"+altD+"<br><span style='color:var(--dim);font-size:8px'>ft</span></div>";
     div.onclick=(function(hex){return function(){selectAc(hex);};})(a.hex);
     ul.appendChild(div);
   });
@@ -594,7 +579,9 @@ function renderList(){
 }
 
 function selectAc(id){
-  selId=id;var a=aircraft[id];if(!a)return;
+  var a=aircraft[id];if(!a)return;
+  if(distMode){addDistPoint(a);return;}
+  selId=id;
   if(a.lat&&a.lon)map.setView([a.lat,a.lon],Math.max(map.getZoom(),8));
   if(markers[id])markers[id].openPopup();
   showDetail(a);renderList();
@@ -644,6 +631,7 @@ function processRaw(rawArr,srcName){
   updateLog(aircraft);
   recordChartPoint(tot);
   refreshMarkers();renderList();renderWatchList();renderTrackedList();
+  updateZoneList();
   drawHeatmap();
 }
 
@@ -747,7 +735,95 @@ function showADSBStations(){
   });
 }
 
-// ═══ THEME ═══
+// ═══ FLOATING CONTROL PANEL ═══
+var curCtrl=null;
+function openCtrl(name){
+  var panel=document.getElementById("ctrlPanel");
+  var body=document.getElementById("ctrlBody");
+  var title=document.getElementById("ctrlTitle");
+  if(curCtrl===name){closeCtrl();return;}
+  curCtrl=name;
+  panel.style.display="flex";
+  if(name==="layers"){
+    title.textContent="🗂️ الطبقات";
+    body.innerHTML=
+      "<div class='layer-row' style='padding:5px 10px'><span class='layer-label'>✈️ الطائرات</span><div class='toggle on' id='lyr-planes' onclick='toggleLayer(\"planes\",this)'></div></div>"+
+      "<div class='layer-row' style='padding:5px 10px'><span class='layer-label'>🚢 السفن</span><div class='toggle' id='lyr-ships' onclick='toggleLayer(\"ships\",this)'></div></div>"+
+      "<div class='layer-row' style='padding:5px 10px'><span class='layer-label'>🛰️ الأقمار</span><div class='toggle' id='lyr-sats' onclick='toggleLayer(\"sats\",this)'></div></div>"+
+      "<div class='layer-row' style='padding:5px 10px'><span class='layer-label'>🌍 ISS</span><div class='toggle' id='lyr-iss' onclick='toggleLayer(\"iss\",this)'></div></div>"+
+      "<div class='layer-row' style='padding:5px 10px'><span class='layer-label'>📡 محطات ADS-B</span><div class='toggle' id='lyr-adsb' onclick='toggleLayer(\"adsb\",this)'></div></div>"+
+      "<div class='layer-row' style='padding:5px 10px'><span class='layer-label'>🚫 مناطق الحظر</span><div class='toggle' id='lyr-nfz' onclick='toggleLayer(\"nfz\",this)'></div></div>"+
+      "<div class='layer-row' style='padding:5px 10px'><span class='layer-label'>🌡️ خريطة حرارية</span><div class='toggle' id='lyr-heat' onclick='toggleLayer(\"heat\",this)'></div></div>";
+    // restore toggle states
+    Object.keys(layers).forEach(function(k){if(layers[k]){var el=document.getElementById("lyr-"+k);if(el)el.classList.add("on");}});
+  }else if(name==="filters"){
+    title.textContent="🔽 تصفية";
+    body.innerHTML="<div class='fg' style='padding:8px 10px'>"+
+      "<button class='fb on' data-t='military'  onclick='toggleF(this)'><div class='fd' style='background:var(--mil)'></div>عسكري</button>"+
+      "<button class='fb on' data-t='civil'     onclick='toggleF(this)'><div class='fd' style='background:var(--civ)'></div>مدني</button>"+
+      "<button class='fb on' data-t='helicopter'onclick='toggleF(this)'><div class='fd' style='background:var(--hel)'></div>حوامة</button>"+
+      "<button class='fb on' data-t='emergency' onclick='toggleF(this)'><div class='fd' style='background:var(--emg)'></div>طوارئ</button>"+
+      "</div>";
+    // restore filter states
+    body.querySelectorAll(".fb").forEach(function(b){if(!filters.has(b.dataset.t))b.classList.remove("on");});
+  }else if(name==="alert"){
+    title.textContent="🔔 تنبيه طراز";
+    body.innerHTML="<div style='display:flex;gap:5px;padding:8px 10px'>"+
+      "<input class='alert-inp' id='alertInp' type='text' placeholder='F16, B52, A388...' value='"+(alertModel||"")+"'>"+
+      "<button class='alert-btn' onclick='setAlert()'>تفعيل</button></div>";
+  }else if(name==="region"){
+    title.textContent="🌍 المنطقة";
+    body.innerHTML="<div style='padding:8px 10px'>"+
+      "<select class='rs' id='regSel' onchange='changeRegion()'>"+
+      "<option value='world'>🌍 العالم كله</option>"+
+      "<option value='gulf'"+(curReg==="gulf"?" selected":"")+" >الخليج العربي</option>"+
+      "<option value='saudi'"+(curReg==="saudi"?" selected":"")+" >المملكة العربية السعودية</option>"+
+      "<option value='middleeast'"+(curReg==="middleeast"?" selected":"")+" >الشرق الأوسط</option>"+
+      "<option value='levant'"+(curReg==="levant"?" selected":"")+" >بلاد الشام والعراق</option>"+
+      "<option value='europe'"+(curReg==="europe"?" selected":"")+" >أوروبا</option>"+
+      "<option value='northamerica'"+(curReg==="northamerica"?" selected":"")+" >أمريكا الشمالية</option>"+
+      "<option value='eastasia'"+(curReg==="eastasia"?" selected":"")+" >شرق آسيا</option>"+
+      "</select></div>";
+  }else if(name==="watch"){
+    title.textContent="👁️ مراقبة ICAO";
+    body.innerHTML="<div style='display:flex;gap:5px;padding:7px 10px;border-bottom:1px solid var(--bd)'>"+
+      "<input class='winp' id='watchInp' type='text' placeholder='ICAO hex e.g. 896620'>"+
+      "<button class='wadd' onclick='addWatch()'>+</button></div>"+
+      "<div id='watchListEl'></div>"+
+      "<div style='padding:6px 10px;font-size:9px;color:var(--dim);border-top:1px solid var(--bd)'>المتتبعة:</div>"+
+      "<div id='trackedListEl'></div>";
+    renderWatchList();renderTrackedList();
+  }else if(name==="log"){
+    title.textContent="📋 سجل الرحلات";
+    body.innerHTML="<div style='display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--bd)'>"+
+      "<span style='font-size:10px;color:var(--dim)'>سجل الجلسة</span>"+
+      "<span id='logCount' style='color:var(--ac);font-family:Share Tech Mono,monospace;font-size:11px'>"+flightLog.length+"</span></div>"+
+      "<button class='log-export' onclick='exportCSV()'>⬇️ تصدير CSV</button>"+
+      "<div id='logListEl' style='max-height:280px;overflow-y:auto'></div>";
+    renderLog();
+  }else if(name==="stats"){
+    title.textContent="📊 إحصاءات";
+    body.innerHTML="<div class='chart-wrap'>"+
+      "<div class='chart-title'><span>عدد الطائرات</span><span id='chartNow' style='color:var(--ac)'>"+( chartHistory.length?chartHistory[chartHistory.length-1].v:"—")+"</span></div>"+
+      "<canvas id='chartCanvas' style='width:100%;height:70px'></canvas></div>"+
+      "<div class='chart-wrap'><div class='chart-title'><span>اليوم مقابل أمس</span></div>"+
+      "<canvas id='chartCanvas2' style='width:100%;height:70px'></canvas></div>"+
+      "<div style='padding:8px 10px'><div style='font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);margin-bottom:6px'>أكثر الدول</div><div id='countryStats'></div></div>";
+    setTimeout(renderChart,50);
+  }else if(name==="fav"){
+    title.textContent="📌 مفضلة وأدوات";
+    body.innerHTML="<div id='favListEl'></div>"+
+      "<div style='padding:6px 10px;font-size:9px;color:var(--dim);border-top:1px solid var(--bd)'>🎯 الطائرات في الدائرة:</div>"+
+      "<div id='zoneListEl' style='font-size:10px;color:var(--dim);padding:4px 10px'>لم يتم رسم دائرة</div>"+
+      "<div style='padding:6px 10px;font-size:9px;color:var(--dim);border-top:1px solid var(--bd)'>📏 المسافة:</div>"+
+      "<div id='distResultEl' style='font-family:Share Tech Mono,monospace;font-size:11px;color:var(--ac);padding:4px 10px'>اختر طائرتين</div>";
+    renderFavList();updateZoneList();
+  }
+}
+function closeCtrl(){curCtrl=null;document.getElementById("ctrlPanel").style.display="none";}
+function showTab(i){openCtrl(["layers","watch","log","stats","fav"][i]||"layers");}
+
+// ═══ FETCH ═══
 function setTheme(t){document.body.className=t;document.querySelectorAll(".tbtn").forEach(function(b){b.classList.remove("active");});if(t==="")document.querySelector(".tbtn.t1").classList.add("active");else if(t==="theme-blue")document.querySelector(".tbtn.t2").classList.add("active");else document.querySelector(".tbtn.t3").classList.add("active");}
 
 // ═══ TABS ═══
@@ -858,6 +934,131 @@ function mobSwitch(tab){
     flightLog.slice(0,50).forEach(function(e){var d=document.createElement("div");d.className="log-item";d.innerHTML="<div style='display:flex;justify-content:space-between'><span style='font-family:Share Tech Mono,monospace;font-size:11px;color:"+(COLORS[e.type]||"#888")+"'>"+(e.cs||e.hex.toUpperCase())+"</span><span class='log-time'>"+e.time+"</span></div><div style='color:var(--dim);font-size:9px'>"+(e.country||"")+"</div>";document.getElementById("mob-log").appendChild(d);});
   }
 }
+
+// ═══ COUNTRY FLAGS ═══
+var FLAGS={"Saudi Arabia":"🇸🇦","UAE":"🇦🇪","United Arab Emirates":"🇦🇪","Qatar":"🇶🇦","Kuwait":"🇰🇼","Bahrain":"🇧🇭","Oman":"🇴🇲","Iraq":"🇮🇶","Iran":"🇮🇷","Egypt":"🇪🇬","Jordan":"🇯🇴","Syria":"🇸🇾","Lebanon":"🇱🇧","Yemen":"🇾🇪","Turkey":"🇹🇷","United States":"🇺🇸","United Kingdom":"🇬🇧","France":"🇫🇷","Germany":"🇩🇪","Russia":"🇷🇺","China":"🇨🇳","India":"🇮🇳","Pakistan":"🇵🇰","Netherlands":"🇳🇱","Spain":"🇪🇸","Italy":"🇮🇹","Israel":"🇮🇱"};
+function getFlag(country){return FLAGS[country]||"🏳️";}
+
+// ═══ AIRCRAFT TIMERS ═══
+var seenTimes={};
+function getTimer(hex){
+  if(!seenTimes[hex])seenTimes[hex]=Date.now();
+  var mins=Math.floor((Date.now()-seenTimes[hex])/60000);
+  if(mins<1)return"< 1 دقيقة";
+  if(mins<60)return mins+" دقيقة";
+  return Math.floor(mins/60)+"س "+( mins%60)+"د";
+}
+
+// ═══ MODEL DATABASE ═══
+var MODEL_DB={
+  "B77W":{name:"Boeing 777-300ER",maker:"Boeing",maxspd:"905 كم/س",range:"13500 كم",cap:"396 راكب",engines:"2x GE90"},
+  "B789":{name:"Boeing 787-9",maker:"Boeing",maxspd:"903 كم/س",range:"14140 كم",cap:"296 راكب",engines:"2x GEnx"},
+  "A388":{name:"Airbus A380-800",maker:"Airbus",maxspd:"903 كم/س",range:"15200 كم",cap:"555 راكب",engines:"4x GP7200"},
+  "A359":{name:"Airbus A350-900",maker:"Airbus",maxspd:"910 كم/س",range:"15000 كم",cap:"315 راكب",engines:"2x Trent XWB"},
+  "A320":{name:"Airbus A320",maker:"Airbus",maxspd:"833 كم/س",range:"6150 كم",cap:"180 راكب",engines:"2x CFM56"},
+  "A321":{name:"Airbus A321",maker:"Airbus",maxspd:"833 كم/س",range:"7400 كم",cap:"220 راكب",engines:"2x CFM56"},
+  "B738":{name:"Boeing 737-800",maker:"Boeing",maxspd:"842 كم/س",range:"5765 كم",cap:"189 راكب",engines:"2x CFM56"},
+  "B737":{name:"Boeing 737",maker:"Boeing",maxspd:"842 كم/س",range:"5600 كم",cap:"149 راكب",engines:"2x CFM56"},
+  "B744":{name:"Boeing 747-400",maker:"Boeing",maxspd:"988 كم/س",range:"13450 كم",cap:"416 راكب",engines:"4x CF6"},
+  "C17":{name:"C-17 Globemaster III",maker:"Boeing Defense",maxspd:"830 كم/س",range:"10390 كم",cap:"77 طن شحن",engines:"4x F117"},
+  "F16":{name:"F-16 Fighting Falcon",maker:"Lockheed Martin",maxspd:"Mach 2",range:"4220 كم",cap:"مقاتلة",engines:"1x F110"},
+  "F15":{name:"F-15 Eagle",maker:"McDonnell Douglas",maxspd:"Mach 2.5",range:"3900 كم",cap:"مقاتلة",engines:"2x F100"},
+  "E3CF":{name:"E-3 Sentry AWACS",maker:"Boeing",maxspd:"855 كم/س",range:"9250 كم",cap:"رادار مراقبة",engines:"4x TF33"},
+  "H60":{name:"UH-60 Black Hawk",maker:"Sikorsky",maxspd:"294 كم/س",range:"584 كم",cap:"11 جندي",engines:"2x T700"},
+  "GLF6":{name:"Gulfstream G650",maker:"Gulfstream",maxspd:"956 كم/س",range:"12964 كم",cap:"18 راكب",engines:"2x BR725"},
+};
+function getModelInfo(model){return model?MODEL_DB[model.toUpperCase()]||null:null;}
+function modelCardHtml(info,model){
+  if(!info)return"<div style='color:var(--dim);font-size:10px;padding:5px 0'>لا توجد معلومات للطراز: "+(model||"—")+"</div>";
+  return"<div class='model-card'><div class='model-name'>"+info.name+"</div><div class='model-specs'>"+
+    "<div class='model-spec'>الصانع: <span>"+info.maker+"</span></div>"+
+    "<div class='model-spec'>السرعة: <span>"+info.maxspd+"</span></div>"+
+    "<div class='model-spec'>المدى: <span>"+info.range+"</span></div>"+
+    "<div class='model-spec'>السعة: <span>"+info.cap+"</span></div>"+
+    "<div class='model-spec'>المحركات: <span>"+info.engines+"</span></div>"+
+    "</div></div>";
+}
+
+// ═══ CIRCLE ZONE ═══
+var circleMode=false,zoneCircle=null,zoneCenter=null,zoneRadius=150;
+function toggleCircleMode(btn){
+  circleMode=!circleMode;
+  btn.classList.toggle("active",circleMode);
+  if(!circleMode){if(zoneCircle){map.removeLayer(zoneCircle);zoneCircle=null;}document.getElementById("zoneListEl").textContent="لم يتم رسم دائرة بعد";return;}
+  map.once("click",function(e){
+    zoneCenter=e.latlng;
+    if(zoneCircle)map.removeLayer(zoneCircle);
+    zoneCircle=L.circle(zoneCenter,{radius:zoneRadius*1000,color:"#00c8f0",fillColor:"#00c8f0",fillOpacity:.04,weight:1.5,dashArray:"6,4"}).addTo(map);
+    circleMode=false;btn.classList.remove("active");
+    updateZoneList();
+    showTab(4);
+  });
+}
+function updateZoneList(){
+  var el=document.getElementById("zoneListEl");if(!el||!zoneCenter)return;
+  var inside=[];
+  Object.values(aircraft).forEach(function(a){
+    if(!a.lat||!a.lon)return;
+    var d=map.distance(zoneCenter,[a.lat,a.lon]);
+    if(d<=zoneRadius*1000)inside.push({a:a,d:Math.round(d/1000)});
+  });
+  inside.sort(function(x,y){return x.d-y.d;});
+  if(inside.length===0){el.innerHTML="<div style='padding:5px;color:var(--dim)'>لا توجد طائرات داخل الدائرة</div>";return;}
+  el.innerHTML=inside.map(function(x){
+    var c=COLORS[x.a.type];
+    return"<div style='padding:4px 11px;border-bottom:1px solid rgba(24,48,74,.3);cursor:pointer;font-size:10px' onclick='selectAc(\""+x.a.hex+"\")'><span style='color:"+c+";font-family:Share Tech Mono,monospace;font-weight:700'>"+(x.a.cs||x.a.hex.toUpperCase())+"</span> <span style='color:var(--dim)'>"+x.d+" كم</span></div>";
+  }).join("");
+}
+
+// ═══ DISTANCE MEASURE ═══
+var distMode=false,distPoints=[],distLine=null;
+function toggleDistMode(btn){
+  distMode=!distMode;btn.classList.toggle("active",distMode);
+  distPoints=[];if(distLine){map.removeLayer(distLine);distLine=null;}
+  document.getElementById("distResultEl").textContent=distMode?"اضغط على طائرتين لقياس المسافة":"اختر طائرتين على الخريطة";
+  if(!distMode)return;
+  showTab(4);
+}
+function addDistPoint(a){
+  if(!distMode||!a.lat||!a.lon)return;
+  distPoints.push(a);
+  if(distPoints.length>=2){
+    var a1=distPoints[0],a2=distPoints[1];
+    var d=map.distance([a1.lat,a1.lon],[a2.lat,a2.lon]);
+    var km=Math.round(d/1000),nm=Math.round(d/1852);
+    if(distLine)map.removeLayer(distLine);
+    distLine=L.polyline([[a1.lat,a1.lon],[a2.lat,a2.lon]],{color:"#ffd000",weight:2,dashArray:"5,4"}).addTo(map);
+    var el=document.getElementById("distResultEl");
+    if(el)el.innerHTML=(a1.cs||a1.hex.toUpperCase())+" ↔ "+(a2.cs||a2.hex.toUpperCase())+"<br><span style='color:#ffd000;font-size:13px'>"+km+" كم / "+nm+" NM</span>";
+    distPoints=[];distMode=false;document.getElementById("distBtn").classList.remove("active");
+  }else{
+    document.getElementById("distResultEl").textContent="✅ الطائرة الأولى: "+(a.cs||a.hex.toUpperCase())+"\nاختر الثانية...";
+  }
+}
+
+// ═══ FAVORITES ═══
+var favorites=[];
+function saveFav(){
+  var c=map.getCenter(),z=map.getZoom();
+  var name=prompt("اسم الموقع المفضل:")||("موقع "+( favorites.length+1));
+  favorites.push({name:name,lat:c.lat,lon:c.lng,zoom:z});
+  renderFavList();showTab(4);
+}
+function goFav(i){var f=favorites[i];map.setView([f.lat,f.lon],f.zoom);}
+function delFav(i){favorites.splice(i,1);renderFavList();}
+function renderFavList(){
+  var el=document.getElementById("favListEl");if(!el)return;
+  el.innerHTML="";
+  if(favorites.length===0){el.innerHTML="<div style='padding:8px 11px;font-size:10px;color:var(--dim)'>لا توجد مواقع محفوظة بعد</div>";return;}
+  favorites.forEach(function(f,i){
+    var d=document.createElement("div");d.className="fav-item";
+    d.innerHTML="<span onclick='goFav("+i+")' style='flex:1;color:var(--tx)'>📍 "+f.name+"</span><span onclick='delFav("+i+")' class='fav-del'>×</span>";
+    el.appendChild(d);
+  });
+}
+
+// ═══ PRINT MAP ═══
+function printMap(){window.print();}
 
 // ═══ FETCH ═══
 async function update(){
