@@ -1062,41 +1062,79 @@ function printMap(){window.print();}
 
 // ═══ FETCH ═══
 async function update(){
-  try{
-    var url=WORKER+"/?region="+curReg;
-    var resp=await fetch(url);
-    if(!resp.ok)throw new Error("http");
-    var data=await resp.json();
-    var ac=data.ac||data.aircraft||[];
-    if(!Array.isArray(ac)||ac.length===0)throw new Error("empty");
-    processRaw(ac,"✅ بيانات حقيقية");
-    document.getElementById("cDot").className="ok";
-    document.getElementById("cTxt").textContent="✅ متصل";
-    var b=document.getElementById("modeBanner");b.className="real";b.textContent="✅ بيانات ADS-B حقيقية";
-    setTimeout(function(){b.className="";},5000);
-  }catch(e){
-    // Demo
-    var reg=REGIONS[curReg],demo=[];
-    var types=["civil","civil","civil","military","helicopter","emergency"];
-    var milCS=["REACH301","EAGLE21","RCH456","DUKE99","VIPER11"];
-    var civCS=["SVA123","UAE456","QTR789","NAS321","FBA654"];
-    var cntrs=["Saudi Arabia","UAE","Qatar","Kuwait","Bahrain","Egypt"];
-    for(var i=0;i<40;i++){
-      var t=types[i%types.length];
-      demo.push({hex:Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,"0"),
-        flight:t==="military"?milCS[i%milCS.length]:t==="emergency"?"EMG"+(i+1):civCS[i%civCS.length],
-        lat:reg.lat+(Math.random()-.5)*12,lon:reg.lon+(Math.random()-.5)*14,
-        alt_baro:t==="helicopter"?1500:25000+Math.floor(Math.random()*14000),
-        gs:380+Math.floor(Math.random()*180),track:Math.floor(Math.random()*360),
-        baro_rate:(Math.random()-.5)*800,
-        squawk:t==="emergency"?"7700":(1000+Math.floor(Math.random()*6777)).toString(),
-        r_country:cntrs[i%cntrs.length],t:t==="civil"?"B77W":null,
-        category:t==="helicopter"?8:0});
+  var reg=REGIONS[curReg];
+
+  // مصادر البيانات الحقيقية — نجرب كل واحدة بالترتيب
+  var sources=[
+    // adsb.lol — مجاني بدون مفتاح
+    {
+      name:"adsb.lol",
+      url:"https://api.adsb.lol/v2/lat/"+reg.lat+"/lon/"+reg.lon+"/dist/"+Math.round(reg.zoom<4?3000:reg.zoom<6?1500:600),
+      parse:function(d){return d.ac||[];}
+    },
+    // adsb.fi — مجاني بدون مفتاح
+    {
+      name:"adsb.fi",
+      url:"https://opendata.adsb.fi/api/v2/lat/"+reg.lat+"/lon/"+reg.lon+"/dist/"+Math.round(reg.zoom<4?3000:reg.zoom<6?1500:600),
+      parse:function(d){return d.aircraft||d.ac||[];}
+    },
+    // OpenSky — مجاني بدون مفتاح (حد أدنى)
+    {
+      name:"OpenSky",
+      url:"https://opensky-network.org/api/states/all?lamin="+(reg.lat-8)+"&lomin="+(reg.lon-10)+"&lamax="+(reg.lat+8)+"&lomax="+(reg.lon+10),
+      parse:function(d){
+        if(!d.states)return[];
+        return d.states.map(function(s){
+          return{hex:s[0],flight:s[1],lat:s[6],lon:s[5],alt_baro:s[7]?Math.round(s[7]*3.281):null,
+            gs:s[9]?Math.round(s[9]*1.944):null,track:s[10],baro_rate:s[11]?Math.round(s[11]*196.85):null,
+            squawk:s[14],r_country:s[2],category:0};
+        });
+      }
+    },
+    // Worker الأصلي
+    {
+      name:"Worker",
+      url:WORKER+"/?region="+curReg,
+      parse:function(d){return d.ac||d.aircraft||[];}
     }
-    processRaw(demo,"⚠️ تجريبي");
-    document.getElementById("cDot").className="wa";
-    document.getElementById("cTxt").textContent="⚠️ تجريبي";
+  ];
+
+  for(var i=0;i<sources.length;i++){
+    try{
+      var src=sources[i];
+      var resp=await fetch(src.url,{signal:AbortSignal.timeout(8000)});
+      if(!resp.ok)continue;
+      var data=await resp.json();
+      var ac=src.parse(data);
+      if(!Array.isArray(ac)||ac.length===0)continue;
+      processRaw(ac,"✅ "+src.name);
+      document.getElementById("cDot").className="ok";
+      document.getElementById("cTxt").textContent="✅ "+src.name;
+      document.getElementById("load").classList.add("h");
+      return;
+    }catch(e){continue;}
   }
+
+  // إذا فشلت كل المصادر — بيانات تجريبية
+  var demo=[];
+  var types=["civil","civil","civil","military","helicopter","emergency"];
+  var milCS=["REACH301","EAGLE21","RCH456","DUKE99","VIPER11"];
+  var civCS=["SVA123","UAE456","QTR789","NAS321","FBA654"];
+  var cntrs=["Saudi Arabia","UAE","Qatar","Kuwait","Bahrain","Egypt"];
+  for(var j=0;j<40;j++){
+    var t=types[j%types.length];
+    demo.push({hex:Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,"0"),
+      flight:t==="military"?milCS[j%milCS.length]:t==="emergency"?"EMG"+(j+1):civCS[j%civCS.length],
+      lat:reg.lat+(Math.random()-.5)*12,lon:reg.lon+(Math.random()-.5)*14,
+      alt_baro:t==="helicopter"?1500:25000+Math.floor(Math.random()*14000),
+      gs:380+Math.floor(Math.random()*180),track:Math.floor(Math.random()*360),
+      baro_rate:(Math.random()-.5)*800,
+      squawk:t==="emergency"?"7700":(1000+Math.floor(Math.random()*6777)).toString(),
+      r_country:cntrs[j%cntrs.length],t:t==="civil"?"B77W":null,category:t==="helicopter"?8:0});
+  }
+  processRaw(demo,"⚠️ تجريبي — تحقق من الاتصال");
+  document.getElementById("cDot").className="wa";
+  document.getElementById("cTxt").textContent="⚠️ لا يوجد اتصال";
   document.getElementById("load").classList.add("h");
 }
 
