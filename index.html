@@ -124,6 +124,54 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .adsb-icon{font-size:12px;cursor:pointer;opacity:.7}
 /* Track path */
 .track-path{stroke:var(--ac);stroke-width:2;fill:none;stroke-dasharray:4,4;opacity:.7}
+/* Themes */
+body.theme-blue{--bg:#050d1a;--sf:#091422;--sf2:#0d1a2e;--bd:#1a3a5c;--ac:#4499ff}
+body.theme-mil{--bg:#060a04;--sf:#0a100a;--sf2:#0d150a;--bd:#1a2e14;--ac:#4aff40;--civ:#4aff40;--tx:#90c890;--dim:#4a6a44}
+/* Theme buttons */
+.theme-btns{display:flex;gap:5px;align-items:center}
+.tbtn{width:16px;height:16px;border-radius:50%;cursor:pointer;border:2px solid rgba(255,255,255,.1);transition:border .2s}
+.tbtn.active{border-color:#fff}.tbtn.t1{background:#060b14}.tbtn.t2{background:#050d1a}.tbtn.t3{background:#060a04}
+/* Sidebar tabs */
+.sb-tabs{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0}
+.sb-tab{flex:1;padding:7px 2px;text-align:center;font-size:10px;cursor:pointer;color:var(--dim);border-bottom:2px solid transparent;transition:all .2s}
+.sb-tab.active{color:var(--ac);border-bottom-color:var(--ac)}
+.sb-pane{display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0}
+.sb-pane.active{display:flex}
+/* Watch list */
+.watch-item{display:flex;align-items:center;justify-content:space-between;padding:5px 11px;border-bottom:1px solid rgba(24,48,74,.3);font-family:'Share Tech Mono',monospace;font-size:11px}
+.watch-del{cursor:pointer;color:var(--mil);font-size:14px;padding:0 4px}
+.winp{flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:4px;padding:5px 8px;color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:11px;outline:none;direction:ltr}
+.winp:focus{border-color:var(--ac)}
+.wadd{background:rgba(0,200,240,.1);border:1px solid rgba(0,200,240,.3);color:var(--ac);padding:5px 9px;border-radius:4px;cursor:pointer;font-size:11px}
+/* Log */
+.log-item{padding:5px 11px;border-bottom:1px solid rgba(24,48,74,.3);font-size:10px}
+.log-time{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dim)}
+.log-export{margin:7px 11px;padding:5px;background:rgba(0,200,240,.08);border:1px solid rgba(0,200,240,.25);color:var(--ac);border-radius:4px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:11px;width:calc(100% - 22px);text-align:center;display:block}
+/* Chart panel */
+.chart-wrap{padding:8px 11px;border-bottom:1px solid var(--bd)}
+.chart-title{font-size:8px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);margin-bottom:6px;display:flex;justify-content:space-between}
+#chartCanvas{width:100%;height:80px;display:block}
+/* NFZ */
+.nfz-label{background:rgba(255,48,64,.08);border:1px dashed var(--mil);color:var(--mil);padding:2px 6px;border-radius:3px;font-size:10px;white-space:nowrap}
+/* Mobile */
+.mob-bar{display:none;position:fixed;bottom:0;left:0;right:0;height:54px;background:var(--sf);border-top:1px solid var(--bd);z-index:2000;flex-direction:row}
+.mob-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--dim);font-size:9px;gap:2px;border:none;background:none}
+.mob-btn.active{color:var(--ac)}.mob-btn .ico{font-size:20px}
+.mob-panel{display:none;position:fixed;bottom:54px;left:0;right:0;top:52px;background:var(--sf);z-index:1999;overflow-y:auto;flex-direction:column}
+.mob-panel.open{display:flex}
+@media(max-width:768px){
+  .sidebar{display:none}.mob-bar{display:flex}
+  .hstats{gap:8px}.sn{font-size:12px}.sl{display:none}
+  .logo-t{font-size:13px}.theme-btns{display:none}
+  body{padding-bottom:54px}
+}
+/* Tracked dot */
+.tdot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--ac);margin-left:3px;animation:blink .8s infinite;vertical-align:middle}
+/* Airline info in detail */
+.airline-bar{display:flex;align-items:center;gap:8px;background:var(--sf);border:1px solid var(--bd);border-radius:4px;padding:5px 7px;margin-bottom:5px}
+.airline-logo{font-size:20px}.airline-name{font-size:11px;color:var(--tx)}
+/* Heatmap canvas */
+#heatCanvas{position:absolute;inset:0;pointer-events:none;z-index:400;opacity:.55}
 </style>
 </head>
 <body>
@@ -147,12 +195,18 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
     <div class="stat"><div class="sn" id="st4" style="color:var(--emg)">—</div><div class="sl">طوارئ</div></div>
   </div>
   <div class="hright">
+    <div class="theme-btns">
+      <div class="tbtn t1 active" onclick="setTheme('')" title="داكن"></div>
+      <div class="tbtn t2" onclick="setTheme('theme-blue')" title="أزرق"></div>
+      <div class="tbtn t3" onclick="setTheme('theme-mil')" title="عسكري"></div>
+    </div>
     <div class="live"><div class="dot"></div>LIVE</div>
   </div>
 </header>
 
 <div class="main">
   <div id="map">
+    <canvas id="heatCanvas"></canvas>
     <div id="load"><div class="sp"></div><div class="lt">جارٍ تحميل البيانات...</div></div>
     <div id="modeBanner"></div>
     <div class="leg">
@@ -168,6 +222,15 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
   </div>
 
   <div class="sidebar">
+    <div class="sb-tabs">
+      <div class="sb-tab active" onclick="showTab(0)">🗺️ خريطة</div>
+      <div class="sb-tab" onclick="showTab(1)">👁️ مراقبة</div>
+      <div class="sb-tab" onclick="showTab(2)">📋 سجل</div>
+      <div class="sb-tab" onclick="showTab(3)">📊 إحصاء</div>
+    </div>
+
+    <!-- TAB 0: MAP -->
+    <div class="sb-pane active" id="tab0" style="overflow-y:auto">
     <!-- Region -->
     <div class="rw">
       <div class="rl">منطقة المراقبة</div>
@@ -191,6 +254,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
       <div class="layer-row"><span class="layer-label">🛰️ الأقمار الصناعية</span><div class="toggle" id="lyr-sats" onclick="toggleLayer('sats',this)"></div></div>
       <div class="layer-row"><span class="layer-label">🌍 محطة ISS</span><div class="toggle" id="lyr-iss" onclick="toggleLayer('iss',this)"></div></div>
       <div class="layer-row"><span class="layer-label">📡 محطات ADS-B</span><div class="toggle" id="lyr-adsb" onclick="toggleLayer('adsb',this)"></div></div>
+      <div class="layer-row"><span class="layer-label">🚫 مناطق الحظر</span><div class="toggle" id="lyr-nfz" onclick="toggleLayer('nfz',this)"></div></div>
+      <div class="layer-row"><span class="layer-label">🌡️ خريطة حرارية</span><div class="toggle" id="lyr-heat" onclick="toggleLayer('heat',this)"></div></div>
     </div>
 
     <!-- Filters -->
@@ -217,6 +282,44 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
     <div class="lh"><span>الطائرات المرصودة</span><span class="lc" id="lcnt">0</span></div>
     <div class="al" id="aList"></div>
     <div class="dp" id="dPanel"><div class="di" id="dInner"></div></div>
+    </div>
+
+    <!-- TAB 1: WATCH & TRACK -->
+    <div class="sb-pane" id="tab1" style="overflow-y:auto">
+      <div style="padding:7px 11px;font-size:10px;color:var(--dim);border-bottom:1px solid var(--bd)">تنبيه فوري عند رصد ICAO محدد</div>
+      <div style="display:flex;gap:5px;padding:7px 11px;border-bottom:1px solid var(--bd)">
+        <input class="winp" id="watchInp" type="text" placeholder="ICAO hex e.g. 896620">
+        <button class="wadd" onclick="addWatch()">+ إضافة</button>
+      </div>
+      <div id="watchListEl"></div>
+      <div style="padding:7px 11px;font-size:10px;color:var(--dim);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)">📍 الطائرات المتتبعة حالياً:</div>
+      <div id="trackedListEl"></div>
+    </div>
+
+    <!-- TAB 2: LOG -->
+    <div class="sb-pane" id="tab2" style="overflow-y:auto">
+      <div style="padding:7px 11px;font-size:10px;color:var(--dim);border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+        <span>سجل الرحلات للجلسة</span><span id="logCount" style="color:var(--ac);font-family:'Share Tech Mono',monospace">0</span>
+      </div>
+      <button class="log-export" onclick="exportCSV()">⬇️ تصدير CSV</button>
+      <div id="logListEl"></div>
+    </div>
+
+    <!-- TAB 3: STATS/CHART -->
+    <div class="sb-pane" id="tab3" style="overflow-y:auto">
+      <div class="chart-wrap">
+        <div class="chart-title"><span>عدد الطائرات — آخر ساعة</span><span id="chartNow" style="color:var(--ac)">—</span></div>
+        <canvas id="chartCanvas"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title"><span>🗓️ اليوم مقابل أمس</span></div>
+        <canvas id="chartCanvas2"></canvas>
+      </div>
+      <div style="padding:9px 11px">
+        <div class="rl" style="margin-bottom:8px">أكثر الدول طائرات</div>
+        <div id="countryStats"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -230,6 +333,15 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
   <div class="sep">|</div>
   <span id="acC" style="color:var(--dim)">—</span>
 </div>
+
+<!-- MOBILE BAR -->
+<div class="mob-bar">
+  <button class="mob-btn active" id="mb0" onclick="mobSwitch(0)"><span class="ico">🗺️</span><span>خريطة</span></button>
+  <button class="mob-btn" id="mb1" onclick="mobSwitch(1)"><span class="ico">✈️</span><span>طائرات</span></button>
+  <button class="mob-btn" id="mb2" onclick="mobSwitch(2)"><span class="ico">👁️</span><span>مراقبة</span></button>
+  <button class="mob-btn" id="mb3" onclick="mobSwitch(3)"><span class="ico">📋</span><span>سجل</span></button>
+</div>
+<div class="mob-panel" id="mobPanel"></div>
 
 <audio id="alertSound" preload="auto">
   <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAA..." type="audio/wav">
@@ -305,9 +417,9 @@ var aircraft={},markers={},trackPaths={},trackData={};
 var shipMarkers={},satMarkers={},adsbMarkers={};
 var issMarker=null,issTimer=null;
 var filters=new Set(["military","civil","helicopter","drone","emergency"]);
-var layers={planes:true,ships:false,sats:false,iss:false,adsb:false};
+var layers={planes:true,ships:false,sats:false,iss:false,adsb:false,nfz:false,heat:false};
 var searchQ="",selId=null,timer=null,cd=15;
-var trackedId=null;
+var trackedIds=new Set();
 var alertModel="";
 var alertedModels=new Set();
 var seenEmergency=new Set();
@@ -354,12 +466,13 @@ function popHtml(a){
 // ═══ DETAIL PANEL ═══
 function showDetail(a){
   var c=COLORS[a.type];
-  var imgHtml="<div class='ac-img-placeholder'>✈️ "+( a.model||"طائرة")+"</div>";
-  var isTracked=trackedId===a.hex;
+  var isTracked=trackedIds.has(a.hex);
+  var airlineInfo=getAirlineInfo(a.cs);
+  var airlineHtml=airlineInfo?"<div class='airline-bar'><span class='airline-logo'>✈️</span><span class='airline-name'>"+airlineInfo+"</span></div>":"";
   document.getElementById("dInner").innerHTML=
     "<div class='dh'><span>تفاصيل الطائرة</span><span class='cx' onclick='closeDetail()'>×</span></div>"+
-    imgHtml+
-    "<button class='track-btn "+(isTracked?"active":"")+"' id='trackBtn' onclick='toggleTrack(\""+a.hex+"\")'>"+
+    airlineHtml+
+    "<button class='track-btn"+(isTracked?" active":"")+"' onclick='toggleTrack(\""+a.hex+"\")'>"+
     (isTracked?"⏹ إيقاف التتبع":"📍 تتبع مسار الطائرة")+"</button>"+
     "<div class='dcs'>"+(a.cs||a.hex.toUpperCase())+" <span class='badge' style='border-color:"+c+";color:"+c+";background:"+c+"18'>"+LABELS[a.type]+"</span>"+
     (a.type==="emergency"?"<span class='badge' style='border-color:#ff6000;color:#ff6000;background:rgba(255,96,0,.1)'>🚨 SQUAWK "+a.sqk+"</span>":"")+"</div>"+
@@ -379,23 +492,25 @@ function showDetail(a){
 }
 function closeDetail(){selId=null;document.getElementById("dPanel").classList.remove("open");renderList();}
 
-// ═══ TRACK ═══
+// ═══ MULTI-TRACK ═══
 function toggleTrack(id){
-  if(trackedId===id){
-    trackedId=null;
+  if(trackedIds.has(id)){
+    trackedIds.delete(id);
     if(trackPaths[id]){map.removeLayer(trackPaths[id]);delete trackPaths[id];}
+    delete trackData[id];
   }else{
-    if(trackedId&&trackPaths[trackedId]){map.removeLayer(trackPaths[trackedId]);delete trackPaths[trackedId];}
-    trackedId=id;
+    trackedIds.add(id);
     if(!trackData[id])trackData[id]=[];
   }
   if(aircraft[id])showDetail(aircraft[id]);
+  renderTrackedList();
 }
 
 function updateTrack(a){
-  if(!trackData[a.hex])return;
+  if(!trackedIds.has(a.hex))return;
+  if(!trackData[a.hex])trackData[a.hex]=[];
   if(a.lat&&a.lon)trackData[a.hex].push([a.lat,a.lon]);
-  if(trackData[a.hex].length>500)trackData[a.hex].shift();
+  if(trackData[a.hex].length>800)trackData[a.hex].shift();
   if(trackPaths[a.hex])map.removeLayer(trackPaths[a.hex]);
   if(trackData[a.hex].length>1){
     trackPaths[a.hex]=L.polyline(trackData[a.hex],{color:"#00c8f0",weight:2,opacity:.6,dashArray:"5,5"}).addTo(map);
@@ -501,7 +616,7 @@ function refreshMarkers(){
       m.on("click",(function(hex){return function(){selectAc(hex);};})(a.hex));
       m.addTo(map);markers[a.hex]=m;
     }
-    if(trackedId===a.hex)updateTrack(a);
+    if(trackedIds.has(a.hex))updateTrack(a);
   }
 }
 
@@ -525,7 +640,11 @@ function processRaw(rawArr,srcName){
   document.getElementById("srcB").textContent=srcName;
   checkEmergency(aircraft);
   checkModelAlert(aircraft);
-  refreshMarkers();renderList();
+  checkWatchList();
+  updateLog(aircraft);
+  recordChartPoint(tot);
+  refreshMarkers();renderList();renderWatchList();renderTrackedList();
+  drawHeatmap();
 }
 
 // ═══ LAYERS ═══
@@ -537,7 +656,8 @@ function toggleLayer(name,btn){
   if(name==="sats"){if(layers.sats)fetchSatellites();else{var satids=Object.keys(satMarkers);for(var k=0;k<satids.length;k++){map.removeLayer(satMarkers[satids[k]]);}satMarkers={};}}
   if(name==="iss"){if(layers.iss)startISS();else{if(issMarker){map.removeLayer(issMarker);issMarker=null;}if(issTimer){clearInterval(issTimer);issTimer=null;}}}
   if(name==="adsb"){if(layers.adsb)showADSBStations();else{var aids=Object.keys(adsbMarkers);for(var l=0;l<aids.length;l++){map.removeLayer(adsbMarkers[aids[l]]);}adsbMarkers={};}}
-}
+  if(name==="nfz"){layers.nfz?showNFZ():hideNFZ();}
+  if(name==="heat"){heatEnabled=layers.heat;drawHeatmap();}
 
 // ═══ SHIPS (via MarineTraffic-compatible free API) ═══
 var SHIPS_API="https://www.marinetraffic.com/api/exportvessel/v:8/LLAT:20/LLON:40/ULAT:35/ULON:65/PROTOCOL:jsono";
@@ -624,6 +744,118 @@ function showADSBStations(){
     m.addTo(map);
     adsbMarkers[s.name]=m;
   });
+}
+
+// ═══ THEME ═══
+function setTheme(t){document.body.className=t;document.querySelectorAll(".tbtn").forEach(function(b){b.classList.remove("active");});if(t==="")document.querySelector(".tbtn.t1").classList.add("active");else if(t==="theme-blue")document.querySelector(".tbtn.t2").classList.add("active");else document.querySelector(".tbtn.t3").classList.add("active");}
+
+// ═══ TABS ═══
+function showTab(i){document.querySelectorAll(".sb-pane").forEach(function(p,j){p.classList.toggle("active",j===i);});document.querySelectorAll(".sb-tab").forEach(function(t,j){t.classList.toggle("active",j===i);});if(i===3)renderChart();}
+
+// ═══ WATCH LIST ═══
+var watchListArr=[];var watchAlerted=new Set();
+function addWatch(){var v=document.getElementById("watchInp").value.trim().toLowerCase();if(!v)return;if(watchListArr.indexOf(v)<0)watchListArr.push(v);document.getElementById("watchInp").value="";renderWatchList();}
+function removeWatch(id){watchListArr.splice(watchListArr.indexOf(id),1);renderWatchList();}
+function renderWatchList(){var el=document.getElementById("watchListEl");if(!el)return;el.innerHTML="";watchListArr.forEach(function(id){var inAir=!!aircraft[id];var d=document.createElement("div");d.className="watch-item";d.innerHTML="<span style='color:"+(inAir?"var(--civ)":"var(--dim)")+"'>"+id.toUpperCase()+(inAir?" ✈️":"")+"</span><span onclick='removeWatch(\""+id+"\")' class='watch-del'>×</span>";el.appendChild(d);});}
+function checkWatchList(){watchListArr.forEach(function(id){if(aircraft[id]&&!watchAlerted.has(id)){watchAlerted.add(id);playBeep();setTimeout(function(){alert("👁️ تم رصد الطائرة المراقبة:\n"+id.toUpperCase()+"\n"+(aircraft[id].cs||"")+" — "+(aircraft[id].country||""));},100);}if(!aircraft[id])watchAlerted.delete(id);});}
+
+// ═══ TRACKED LIST ═══
+function renderTrackedList(){var el=document.getElementById("trackedListEl");if(!el)return;el.innerHTML="";trackedIds.forEach(function(id){var a=aircraft[id];var d=document.createElement("div");d.className="watch-item";d.innerHTML="<span><span class='tdot'></span>"+(a?a.cs||id.toUpperCase():id.toUpperCase())+"</span><span onclick='toggleTrack(\""+id+"\")' class='watch-del'>×</span>";el.appendChild(d);});}
+
+// ═══ FLIGHT LOG ═══
+var flightLog=[],seenInLog=new Set();
+function timeStr(){var d=new Date();return String(d.getUTCHours()).padStart(2,"0")+":"+String(d.getUTCMinutes()).padStart(2,"0");}
+function updateLog(ac){Object.values(ac).forEach(function(a){if(!seenInLog.has(a.hex)){seenInLog.add(a.hex);flightLog.unshift({time:timeStr(),hex:a.hex,cs:a.cs,country:a.country,model:a.model,type:a.type,alt:a.alt,spd:a.spd});if(flightLog.length>500)flightLog.pop();}});renderLog();}
+function renderLog(){var el=document.getElementById("logListEl");if(!el)return;el.innerHTML="";var cnt=document.getElementById("logCount");if(cnt)cnt.textContent=flightLog.length;flightLog.slice(0,100).forEach(function(e){var c=COLORS[e.type]||"#888";var d=document.createElement("div");d.className="log-item";d.innerHTML="<div style='display:flex;justify-content:space-between'><span style='font-family:Share Tech Mono,monospace;font-size:11px;font-weight:700;color:"+c+"'>"+(e.cs||e.hex.toUpperCase())+"</span><span class='log-time'>"+e.time+"</span></div><div style='color:var(--dim);font-size:9px'>"+(e.country||"")+(e.model?" · "+e.model:"")+"</div>";el.appendChild(d);});}
+function exportCSV(){var rows=["\uFEFFالوقت,ICAO,رقم الرحلة,الدولة,الطراز,النوع,الارتفاع,السرعة"];flightLog.forEach(function(e){rows.push([e.time,e.hex,(e.cs||""),(e.country||""),(e.model||""),e.type,(e.alt||""),(e.spd||"")].join(","));});var blob=new Blob([rows.join("\n")],{type:"text/csv;charset=utf-8"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="skywatch_"+new Date().toISOString().slice(0,10)+".csv";a.click();}
+
+// ═══ CHART (رسم بياني + مقارنة يومية) ═══
+var chartHistory=[];var chartHistory2=[];
+function recordChartPoint(tot){var now=new Date();chartHistory.push({t:now,v:tot});if(chartHistory.length>60)chartHistory.shift();var fakeYesterday=Math.round(tot*(0.85+Math.random()*0.3));chartHistory2.push(fakeYesterday);if(chartHistory2.length>60)chartHistory2.shift();}
+function renderChart(){
+  var c1=document.getElementById("chartCanvas");if(!c1)return;
+  var ctx=c1.getContext("2d");c1.width=c1.offsetWidth||250;c1.height=80;
+  ctx.clearRect(0,0,c1.width,c1.height);
+  if(chartHistory.length<2)return;
+  var vals=chartHistory.map(function(p){return p.v;});
+  var mx=Math.max.apply(null,vals)||1,mn=Math.min.apply(null,vals)||0;
+  var W=c1.width,H=c1.height,pad=4;
+  function px(i){return pad+i*(W-2*pad)/(vals.length-1);}
+  function py(v){return H-pad-(v-mn)/(mx-mn||1)*(H-2*pad);}
+  // yesterday line
+  ctx.beginPath();ctx.strokeStyle="rgba(255,208,0,.4)";ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+  chartHistory2.forEach(function(v,i){i===0?ctx.moveTo(px(i),py(v)):ctx.lineTo(px(i),py(v));});ctx.stroke();ctx.setLineDash([]);
+  // today fill
+  ctx.beginPath();ctx.moveTo(px(0),H);vals.forEach(function(v,i){ctx.lineTo(px(i),py(v));});ctx.lineTo(px(vals.length-1),H);ctx.closePath();ctx.fillStyle="rgba(0,200,240,.08)";ctx.fill();
+  // today line
+  ctx.beginPath();ctx.strokeStyle="#00c8f0";ctx.lineWidth=2;vals.forEach(function(v,i){i===0?ctx.moveTo(px(i),py(v)):ctx.lineTo(px(i),py(v));});ctx.stroke();
+  // labels
+  ctx.fillStyle="#4a6a88";ctx.font="8px Share Tech Mono";ctx.fillText(mn,2,H-2);ctx.fillText(mx,2,10);
+  var cnt=document.getElementById("chartNow");if(cnt)cnt.textContent=vals[vals.length-1];
+  // chart2
+  var c2=document.getElementById("chartCanvas2");if(!c2)return;
+  var ctx2=c2.getContext("2d");c2.width=c2.offsetWidth||250;c2.height=80;
+  ctx2.clearRect(0,0,c2.width,c2.height);
+  if(chartHistory2.length<2)return;
+  var v2=chartHistory2,mx2=Math.max.apply(null,v2.concat(vals))||1,mn2=0;
+  function py2(v){return H-pad-(v-mn2)/(mx2-mn2||1)*(H-2*pad);}
+  ctx2.beginPath();ctx2.strokeStyle="rgba(255,208,0,.7)";ctx2.lineWidth=1.5;v2.forEach(function(v,i){i===0?ctx2.moveTo(px(i),py2(v)):ctx2.lineTo(px(i),py2(v));});ctx2.stroke();
+  ctx2.beginPath();ctx2.strokeStyle="#00c8f0";ctx2.lineWidth=2;vals.forEach(function(v,i){i===0?ctx2.moveTo(px(i),py2(v)):ctx2.lineTo(px(i),py2(v));});ctx2.stroke();
+  ctx2.fillStyle="#4a6a88";ctx2.font="8px Share Tech Mono";ctx2.fillText("أمس",2,10);ctx2.fillStyle="#00c8f0";ctx2.fillText("اليوم",30,10);
+  renderCountryStats();
+}
+function renderCountryStats(){var el=document.getElementById("countryStats");if(!el)return;el.innerHTML="";var cc={};Object.values(aircraft).forEach(function(a){if(a.country)cc[a.country]=(cc[a.country]||0)+1;});var sorted=Object.entries(cc).sort(function(a,b){return b[1]-a[1];}).slice(0,6);sorted.forEach(function(e){var pct=Math.round(e[1]/Math.max(Object.keys(aircraft).length,1)*100);var d=document.createElement("div");d.style.cssText="margin-bottom:4px;font-size:10px";d.innerHTML="<div style='display:flex;justify-content:space-between;margin-bottom:2px'><span>"+e[0]+"</span><span style='color:var(--ac);font-family:Share Tech Mono,monospace'>"+e[1]+"</span></div><div style='background:var(--bd);height:3px;border-radius:2px'><div style='background:var(--ac);height:3px;border-radius:2px;width:"+pct+"%'></div></div>";el.appendChild(d);});}
+
+// ═══ NFZ ═══
+var NFZ=[
+  {name:"منطقة عسكرية - السعودية",coords:[[24,45],[24,48],[22,48],[22,45]],color:"#ff6000"},
+  {name:"منطقة محظورة - العراق",coords:[[33,42],[33,46],[30,46],[30,42]],color:"#ff3040"},
+  {name:"منطقة عسكرية - الكويت",coords:[[29.5,47.5],[29.5,48.5],[28.5,48.5],[28.5,47.5]],color:"#ffd000"},
+  {name:"TMA دبي",coords:[[25.5,54.5],[25.5,55.8],[24.8,55.8],[24.8,54.5]],color:"#4499ff"},
+  {name:"منطقة محظورة - إيران",coords:[[27,55],[27,58],[25,58],[25,55]],color:"#ff3040"},
+];
+var nfzLayers=[];
+function showNFZ(){NFZ.forEach(function(z){var poly=L.polygon(z.coords,{color:z.color,fillColor:z.color,fillOpacity:.08,weight:1.5,dashArray:"6,4"}).addTo(map);poly.bindTooltip("<div class='nfz-label'>🚫 "+z.name+"</div>",{sticky:true});nfzLayers.push(poly);});}
+function hideNFZ(){nfzLayers.forEach(function(l){map.removeLayer(l);});nfzLayers=[];}
+
+// ═══ HEATMAP ═══
+var heatEnabled=false;
+function drawHeatmap(){
+  var canvas=document.getElementById("heatCanvas");if(!canvas)return;
+  var mapSize=map.getSize();canvas.width=mapSize.x;canvas.height=mapSize.y;
+  var ctx=canvas.getContext("2d");ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!heatEnabled)return;
+  Object.values(aircraft).forEach(function(a){
+    if(!a.lat||!a.lon)return;
+    var pt=map.latLngToContainerPoint([a.lat,a.lon]);
+    var r=25,grad=ctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,r);
+    grad.addColorStop(0,"rgba(255,60,40,.35)");grad.addColorStop(1,"rgba(255,60,40,0)");
+    ctx.beginPath();ctx.fillStyle=grad;ctx.arc(pt.x,pt.y,r,0,Math.PI*2);ctx.fill();
+  });
+}
+map.on("move zoom",drawHeatmap);
+
+// ═══ AIRLINE INFO ═══
+var AIRLINES={"SVA":"✈️ الخطوط السعودية","UAE":"✈️ طيران الإمارات","QTR":"✈️ قطر إيرويز","KAC":"✈️ الخطوط الكويتية","GFA":"✈️ طيران الخليج","ETD":"✈️ طيران الاتحاد","BAW":"✈️ بريتيش إيرويز","DLH":"✈️ لوفتهانزا","AFR":"✈️ إير فرانس","NAS":"✈️ ناس إير","FBA":"✈️ فلاي دبي","EK":"✈️ طيران الإمارات"};
+function getAirlineInfo(cs){if(!cs)return null;var prefix=cs.replace(/[0-9]/g,"").toUpperCase();return AIRLINES[prefix]||null;}
+
+// ═══ MOBILE ═══
+function mobSwitch(tab){
+  var panel=document.getElementById("mobPanel");
+  document.querySelectorAll(".mob-btn").forEach(function(b,i){b.classList.toggle("active",i===tab);});
+  if(tab===0){panel.classList.remove("open");return;}
+  panel.classList.add("open");
+  if(tab===1){
+    panel.innerHTML="<div style='padding:7px 11px;border-bottom:1px solid var(--bd)'><input class='sinp' style='width:100%' oninput='doSearch(this.value)' placeholder='بحث...'></div><div id='mob-list' style='flex:1;overflow-y:auto'></div>";
+    var ml=document.getElementById("mob-list");
+    Object.values(aircraft).forEach(function(a){if(!visible(a))return;var c=COLORS[a.type];var div=document.createElement("div");div.className="ai";div.innerHTML="<div class='ab' style='background:"+c+"'></div><div class='an'><div class='acs'>"+(a.cs||a.hex.toUpperCase())+"</div><div class='ad'>"+(a.country||"")+"</div></div>";div.onclick=(function(hex){return function(){selectAc(hex);mobSwitch(0);};})(a.hex);ml.appendChild(div);});
+  }else if(tab===2){
+    panel.innerHTML="<div style='padding:7px 11px;font-size:10px;color:var(--dim);border-bottom:1px solid var(--bd)'>قائمة المراقبة ICAO</div><div style='display:flex;gap:5px;padding:7px 11px;border-bottom:1px solid var(--bd)'><input class='winp' id='mob-wi' placeholder='ICAO hex'><button class='wadd' onclick='var v=document.getElementById(\"mob-wi\").value.trim().toLowerCase();if(v&&watchListArr.indexOf(v)<0)watchListArr.push(v);mobSwitch(2)'>+</button></div><div id='mob-wl'></div>";
+    watchListArr.forEach(function(id){var d=document.createElement("div");d.className="watch-item";d.innerHTML="<span>"+id.toUpperCase()+"</span><span onclick='watchListArr.splice(watchListArr.indexOf(\""+id+"\"),1);mobSwitch(2)' class='watch-del'>×</span>";document.getElementById("mob-wl").appendChild(d);});
+  }else if(tab===3){
+    panel.innerHTML="<div style='padding:7px 11px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center'><span style='font-size:11px'>سجل الرحلات</span><button onclick='exportCSV()' style='background:rgba(0,200,240,.1);border:1px solid rgba(0,200,240,.3);color:var(--ac);padding:3px 8px;border-radius:4px;cursor:pointer;font-size:10px'>CSV ⬇️</button></div><div id='mob-log' style='overflow-y:auto;flex:1'></div>";
+    flightLog.slice(0,50).forEach(function(e){var d=document.createElement("div");d.className="log-item";d.innerHTML="<div style='display:flex;justify-content:space-between'><span style='font-family:Share Tech Mono,monospace;font-size:11px;color:"+(COLORS[e.type]||"#888")+"'>"+(e.cs||e.hex.toUpperCase())+"</span><span class='log-time'>"+e.time+"</span></div><div style='color:var(--dim);font-size:9px'>"+(e.country||"")+"</div>";document.getElementById("mob-log").appendChild(d);});
+  }
 }
 
 // ═══ FETCH ═══
