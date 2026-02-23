@@ -658,6 +658,7 @@ function toggleLayer(name,btn){
   if(name==="adsb"){if(layers.adsb)showADSBStations();else{var aids=Object.keys(adsbMarkers);for(var l=0;l<aids.length;l++){map.removeLayer(adsbMarkers[aids[l]]);}adsbMarkers={};}}
   if(name==="nfz"){layers.nfz?showNFZ():hideNFZ();}
   if(name==="heat"){heatEnabled=layers.heat;drawHeatmap();}
+}
 
 // ═══ SHIPS (via MarineTraffic-compatible free API) ═══
 var SHIPS_API="https://www.marinetraffic.com/api/exportvessel/v:8/LLAT:20/LLON:40/ULAT:35/ULON:65/PROTOCOL:jsono";
